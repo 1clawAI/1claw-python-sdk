@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import builtins
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
@@ -54,7 +55,7 @@ class VaultResource:
         self,
         vault_id: str,
         custody_mode: str,
-        providers: list[str] | None = None,
+        providers: builtins.list[str] | None = None,
     ) -> OneclawResponse[Any]:
         """Enable Multi-Party Computation on a vault."""
         body: dict[str, Any] = {"custody_mode": custody_mode}

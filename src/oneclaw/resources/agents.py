@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import builtins
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
@@ -25,14 +26,14 @@ class AgentsResource:
         shroud_enabled: bool = False,
         shroud_config: dict[str, Any] | None = None,
         token_ttl_seconds: int | None = None,
-        vault_ids: list[str] | None = None,
-        scopes: list[str] | None = None,
-        tx_to_allowlist: list[str] | None = None,
+        vault_ids: builtins.list[str] | None = None,
+        scopes: builtins.list[str] | None = None,
+        tx_to_allowlist: builtins.list[str] | None = None,
         tx_max_value_eth: str | None = None,
         tx_daily_limit_eth: str | None = None,
-        tx_allowed_chains: list[str] | None = None,
+        tx_allowed_chains: builtins.list[str] | None = None,
         federation_enabled: bool | None = None,
-        federation_audiences: list[str] | None = None,
+        federation_audiences: builtins.list[str] | None = None,
         message_signing_enabled: bool | None = None,
         api_key_expires_at: str | None = None,
     ) -> OneclawResponse[Any]:
@@ -169,7 +170,7 @@ class AgentsResource:
         return self._http.request("POST", f"/v1/agents/{agent_id}/transactions/simulate", body=body)
 
     def simulate_bundle(
-        self, agent_id: str, transactions: list[dict[str, Any]]
+        self, agent_id: str, transactions: builtins.list[dict[str, Any]]
     ) -> OneclawResponse[Any]:
         """Simulate a bundle of transactions."""
         return self._http.request(
