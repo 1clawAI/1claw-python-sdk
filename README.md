@@ -204,6 +204,30 @@ events = client.risk.list_events(severity="high")
 client.risk.create_honeytoken(vault_id, "canary/secret-key")
 ```
 
+### DPoP (Proof-of-Possession)
+
+```python
+client = create_client(api_key="ocv_...", dpop=True)
+```
+
+### Approvals
+
+```python
+approvals = client.approvals.list(status="pending")
+client.approvals.decide(approval_id, "approved")
+```
+
+### Email OTP & OAuth
+
+```python
+client.auth.send_email_otp("user@example.com")
+resp = client.auth.verify_email_otp("user@example.com", "123456")
+
+client.auth.social_login(provider="google", id_token="...")
+```
+
+> **Note:** For the full v0.34 API surface (including spend policies, deposit destinations, fiat ramps, internal accounts, and more), see the [TypeScript SDK](https://www.npmjs.com/package/@1claw/sdk) and the [OpenAPI spec](https://www.npmjs.com/package/@1claw/openapi-spec).
+
 ## Error Handling
 
 ```python
