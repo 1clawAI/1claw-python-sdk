@@ -123,6 +123,14 @@ class AgentsResource:
         treasury_id: str | None = None,
         mode: str | None = None,
         idempotency_key: str | None = None,
+        destination_tag: int | None = None,
+        memo: str | None = None,
+        fee_rate_sat_per_vbyte: int | None = None,
+        fee_limit_sun: int | None = None,
+        token_mint: str | None = None,
+        token_decimals: int | None = None,
+        ttl: int | None = None,
+        xrpl_tx_json: dict[str, Any] | None = None,
     ) -> OneclawResponse[Any]:
         """Submit a transaction via the Intents API."""
         body: dict[str, Any] = {"chain": chain, "to": to, "value": value}
@@ -132,6 +140,11 @@ class AgentsResource:
             "max_priority_fee_per_gas": max_priority_fee_per_gas,
             "signing_key_path": signing_key_path, "simulate_first": simulate_first,
             "gasless": gasless, "treasury_id": treasury_id, "mode": mode,
+            "destination_tag": destination_tag, "memo": memo,
+            "fee_rate_sat_per_vbyte": fee_rate_sat_per_vbyte,
+            "fee_limit_sun": fee_limit_sun, "token_mint": token_mint,
+            "token_decimals": token_decimals, "ttl": ttl,
+            "xrpl_tx_json": xrpl_tx_json,
         }.items():
             if val is not None:
                 body[key] = val

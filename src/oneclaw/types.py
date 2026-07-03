@@ -379,6 +379,14 @@ class SubmitTransactionRequest:
     gasless: bool | None = None
     treasury_id: str | None = None
     mode: str | None = None
+    destination_tag: int | None = None
+    memo: str | None = None
+    fee_rate_sat_per_vbyte: int | None = None
+    fee_limit_sun: int | None = None
+    token_mint: str | None = None
+    token_decimals: int | None = None
+    ttl: int | None = None
+    xrpl_tx_json: dict[str, Any] | None = None
 
 
 @dataclass
@@ -416,6 +424,7 @@ class SignIntentRequest:
     signing_key_path: str | None = None
     message: str | None = None
     typed_data: dict[str, Any] | None = None
+    hash: str | None = None
     tx_type: int | None = None
     to: str | None = None
     value: str | None = None
@@ -425,6 +434,15 @@ class SignIntentRequest:
     gas_price: str | None = None
     max_fee_per_gas: str | None = None
     max_priority_fee_per_gas: str | None = None
+    sign_only: bool | None = None
+    destination_tag: int | None = None
+    memo: str | None = None
+    fee_rate_sat_per_vbyte: int | None = None
+    fee_limit_sun: int | None = None
+    token_mint: str | None = None
+    token_decimals: int | None = None
+    ttl: int | None = None
+    xrpl_tx_json: dict[str, Any] | None = None
 
 
 @dataclass
