@@ -124,6 +124,23 @@ resp = client.agents.sign_intent(
     message="0x48656c6c6f",
 )
 print(resp.data["signature"])
+
+# Non-EVM: Solana devnet native transfer
+resp = client.agents.submit_transaction(
+    agent_id,
+    chain="solana-devnet",
+    to="RecipientBase58...",
+    value="0.001",
+)
+
+# Non-EVM: Bitcoin testnet
+resp = client.agents.sign_transaction(
+    agent_id,
+    chain="bitcoin-testnet",
+    to="tb1q...",
+    value="0.00001",
+    fee_rate_sat_per_vbyte=5,
+)
 ```
 
 ### Signing Keys
@@ -226,7 +243,7 @@ resp = client.auth.verify_email_otp("user@example.com", "123456")
 client.auth.social_login(provider="google", id_token="...")
 ```
 
-> **Note:** For the full v0.34 API surface (including spend policies, deposit destinations, fiat ramps, internal accounts, and more), see the [TypeScript SDK](https://www.npmjs.com/package/@1claw/sdk) and the [OpenAPI spec](https://www.npmjs.com/package/@1claw/openapi-spec).
+> **Note:** For the full v0.36 API surface (non-EVM transaction signing, spend policies, deposit destinations, fiat ramps, internal accounts, and more), see the [TypeScript SDK](https://www.npmjs.com/package/@1claw/sdk) and the [OpenAPI spec](https://www.npmjs.com/package/@1claw/openapi-spec).
 
 ## Error Handling
 
