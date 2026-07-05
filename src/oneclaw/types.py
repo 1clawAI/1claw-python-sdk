@@ -266,6 +266,10 @@ class CreateAgentRequest:
     tx_max_value_eth: str | None = None
     tx_daily_limit_eth: str | None = None
     tx_allowed_chains: list[str] | None = None
+    tx_token_allowlist: list[str] | None = None
+    tx_known_tokens_only: bool | None = None
+    xrpl_allowed_tx_types: list[str] | None = None
+    per_chain_guardrails: dict | None = None
     federation_enabled: bool | None = None
     federation_audiences: list[str] | None = None
     message_signing_enabled: bool | None = None
@@ -289,6 +293,10 @@ class UpdateAgentRequest:
     tx_max_value_eth: str | None = None
     tx_daily_limit_eth: str | None = None
     tx_allowed_chains: list[str] | None = None
+    tx_token_allowlist: list[str] | None = None
+    tx_known_tokens_only: bool | None = None
+    xrpl_allowed_tx_types: list[str] | None = None
+    per_chain_guardrails: dict | None = None
     federation_enabled: bool | None = None
     federation_audiences: list[str] | None = None
     message_signing_enabled: bool | None = None
@@ -321,6 +329,10 @@ class AgentResponse:
     tx_daily_limit_eth: str | None = None
     tx_spent_today_eth: str | None = None
     tx_allowed_chains: list[str] | None = None
+    tx_token_allowlist: list[str] | None = None
+    tx_known_tokens_only: bool | None = None
+    xrpl_allowed_tx_types: list[str] | None = None
+    per_chain_guardrails: dict | None = None
     evm_address: str | None = None
     smart_accounts: list[dict[str, Any]] | None = None
     federation_enabled: bool | None = None
@@ -775,3 +787,27 @@ class ApiKeyCreatedResponse:
 @dataclass
 class ApiKeyListResponse:
     keys: list[ApiKeyResponse] = field(default_factory=list)
+
+
+# ---------------------------------------------------------------------------
+# Known Tokens
+# ---------------------------------------------------------------------------
+
+@dataclass
+class KnownToken:
+    id: str
+    chain: str
+    symbol: str
+    name: str
+    contract_address: str
+    decimals: int
+    is_testnet: bool
+    is_verified: bool
+    logo_url: str | None = None
+    created_at: str | None = None
+    updated_at: str | None = None
+
+
+@dataclass
+class KnownTokenListResponse:
+    tokens: list[KnownToken] = field(default_factory=list)
