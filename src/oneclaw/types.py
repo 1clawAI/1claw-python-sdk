@@ -269,7 +269,7 @@ class CreateAgentRequest:
     tx_token_allowlist: list[str] | None = None
     tx_known_tokens_only: bool | None = None
     xrpl_allowed_tx_types: list[str] | None = None
-    per_chain_guardrails: dict | None = None
+    per_chain_guardrails: dict[str, Any] | None = None
     federation_enabled: bool | None = None
     federation_audiences: list[str] | None = None
     message_signing_enabled: bool | None = None
@@ -298,7 +298,7 @@ class UpdateAgentRequest:
     tx_token_allowlist: list[str] | None = None
     tx_known_tokens_only: bool | None = None
     xrpl_allowed_tx_types: list[str] | None = None
-    per_chain_guardrails: dict | None = None
+    per_chain_guardrails: dict[str, Any] | None = None
     federation_enabled: bool | None = None
     federation_audiences: list[str] | None = None
     message_signing_enabled: bool | None = None
@@ -336,7 +336,7 @@ class AgentResponse:
     tx_token_allowlist: list[str] | None = None
     tx_known_tokens_only: bool | None = None
     xrpl_allowed_tx_types: list[str] | None = None
-    per_chain_guardrails: dict | None = None
+    per_chain_guardrails: dict[str, Any] | None = None
     evm_address: str | None = None
     smart_accounts: list[dict[str, Any]] | None = None
     federation_enabled: bool | None = None
