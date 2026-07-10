@@ -6,6 +6,7 @@ from oneclaw.http_client import HttpClient
 from oneclaw.resources.agents import AgentsResource
 from oneclaw.resources.api_keys import ApiKeysResource
 from oneclaw.resources.approvals import ApprovalsResource
+from oneclaw.resources.bindings import BindingsResource
 from oneclaw.resources.audit import AuditResource
 from oneclaw.resources.auth import AuthResource
 from oneclaw.resources.billing import BillingResource
@@ -74,6 +75,7 @@ class OneclawClient:
         self.approvals = ApprovalsResource(self._http)
         self.webhooks = WebhooksResource(self._http)
         self.risk = RiskResource(self._http)
+        self.bindings = BindingsResource(self._http)
 
     def _auto_authenticate_user_key(self, api_key: str) -> None:
         """Exchange a ``1ck_`` user API key for a JWT (fire-and-forget)."""

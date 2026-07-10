@@ -276,6 +276,8 @@ class CreateAgentRequest:
     eip712_default_policy: str | None = None
     eip712_domain_allowlist: list[dict[str, Any]] | None = None
     api_key_expires_at: str | None = None
+    execution_intents_enabled: bool | None = None
+    execution_guardrails: dict[str, Any] | None = None
 
 
 @dataclass
@@ -303,6 +305,8 @@ class UpdateAgentRequest:
     eip712_default_policy: str | None = None
     eip712_domain_allowlist: list[dict[str, Any]] | None = None
     api_key_expires_at: str | None = None
+    execution_intents_enabled: bool | None = None
+    execution_guardrails: dict[str, Any] | None = None
 
 
 @dataclass
@@ -345,6 +349,8 @@ class AgentResponse:
     platform_app_id: str | None = None
     platform_locked: bool | None = None
     treasury_signing_mode: str | None = None
+    execution_intents_enabled: bool | None = None
+    execution_guardrails: dict[str, Any] | None = None
 
 
 @dataclass
@@ -811,3 +817,93 @@ class KnownToken:
 @dataclass
 class KnownTokenListResponse:
     tokens: list[KnownToken] = field(default_factory=list)
+
+
+# ---------------------------------------------------------------------------
+# Execution Intents — Bindings & Execution
+# ---------------------------------------------------------------------------
+
+@dataclass
+class CreateBindingRequest:
+    name: str
+    binding_type: str
+    config: dict[str, Any] | None = None
+    guardrails: dict[str, Any] | None = None
+    credential: dict[str, Any] | None = None
+
+
+@dataclass
+class UpdateBindingRequest:
+    name: str | None = None
+    config: dict[str, Any] | None = None
+    guardrails: dict[str, Any] | None = None
+    is_active: bool | None = None
+    credential: dict[str, Any] | None = None
+
+
+@dataclass
+class BindingResponse:
+    id: str
+    agent_id: str
+    binding_type: str
+    name: str
+    config: dict[str, Any] = field(default_factory=dict)
+    guardrails: dict[str, Any] = field(default_factory=dict)
+    is_active: bool = True
+    created_at: str | None = None
+    updated_at: str | None = None
+
+
+@dataclass
+class BindingListResponse:
+    bindings: list[BindingResponse] = field(default_factory=list)
+
+
+@dataclass
+class ExecuteRequest:
+    binding: str
+    intent_type: str
+    params: dict[str, Any] = field(default_factory=dict)
+    execution_mode: str | None = None
+
+
+@dataclass
+class ExecuteResponse:
+    execution_id: str
+    status: str
+    result: dict[str, Any] | None = None
+    error: str | None = None
+    duration_ms: int | None = None
+    redactions_applied: int | None = None
+
+
+@dataclass
+class ExecutionEventResponse:
+    id: str
+    agent_id: str
+    binding_id: str
+    intent_type: str
+    execution_mode: str
+    status: str
+    duration_ms: int | None = None
+    error: str | None = None
+    cost_cents: int | None = None
+    redactions_applied: int | None = None
+    created_at: str | None = None
+
+
+@dataclass
+class ExecutionEventListResponse:
+    events: list[ExecutionEventResponse] = field(default_factory=list)
+
+
+@dataclass
+class TestBindingRequest:
+    timeout_ms: int | None = None
+
+
+@dataclass
+class TestBindingResponse:
+    success: bool = False
+    latency_ms: int = 0
+    error: str | None = None

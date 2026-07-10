@@ -3,6 +3,7 @@
 from oneclaw.resources.agents import AgentsResource
 from oneclaw.resources.api_keys import ApiKeysResource
 from oneclaw.resources.approvals import ApprovalsResource
+from oneclaw.resources.bindings import BindingsResource
 from oneclaw.resources.audit import AuditResource
 from oneclaw.resources.auth import AuthResource
 from oneclaw.resources.billing import BillingResource
@@ -38,4 +39,5 @@ __all__ = [
     "ApprovalsResource",
     "WebhooksResource",
     "RiskResource",
+    "BindingsResource",
 ]

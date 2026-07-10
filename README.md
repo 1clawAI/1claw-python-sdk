@@ -143,6 +143,45 @@ resp = client.agents.sign_transaction(
 )
 ```
 
+### Execution Intents (Bindings)
+
+```python
+# Create a binding to an external service
+resp = client.bindings.create(
+    agent_id,
+    name="OpenAI GPT-4",
+    binding_type="http_api",
+    config={"base_url": "https://api.openai.com/v1", "method": "POST"},
+    guardrails={"max_tokens_per_request": 4096},
+)
+binding_id = resp.data["id"]
+
+# List bindings
+bindings = client.bindings.list(agent_id)
+
+# Test connectivity
+result = client.bindings.test(agent_id, binding_id)
+print(result.data["latency_ms"])
+
+# Execute an intent
+resp = client.bindings.execute(
+    agent_id,
+    binding="OpenAI GPT-4",
+    intent_type="chat_completion",
+    params={"model": "gpt-4", "messages": [{"role": "user", "content": "Hello"}]},
+)
+print(resp.data["execution_id"])
+
+# List execution history
+events = client.bindings.list_executions(agent_id, limit=20)
+
+# Update guardrails
+client.bindings.update(agent_id, binding_id, guardrails={"max_tokens_per_request": 8192})
+
+# Delete a binding
+client.bindings.delete(agent_id, binding_id)
+```
+
 ### Signing Keys
 
 ```python
@@ -243,7 +282,7 @@ resp = client.auth.verify_email_otp("user@example.com", "123456")
 client.auth.social_login(provider="google", id_token="...")
 ```
 
-> **Note:** For the full v0.36 API surface (non-EVM transaction signing, spend policies, deposit destinations, fiat ramps, internal accounts, and more), see the [TypeScript SDK](https://www.npmjs.com/package/@1claw/sdk) and the [OpenAPI spec](https://www.npmjs.com/package/@1claw/openapi-spec).
+> **Note:** For the full API surface (non-EVM transaction signing, spend policies, deposit destinations, fiat ramps, internal accounts, and more), see the [TypeScript SDK](https://www.npmjs.com/package/@1claw/sdk) and the [OpenAPI spec](https://www.npmjs.com/package/@1claw/openapi-spec).
 
 ## Error Handling
 
