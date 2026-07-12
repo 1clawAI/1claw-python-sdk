@@ -149,10 +149,11 @@ resp = client.agents.sign_transaction(
 # Create a binding to an external service
 resp = client.bindings.create(
     agent_id,
-    name="OpenAI GPT-4",
-    binding_type="http_api",
-    config={"base_url": "https://api.openai.com/v1", "method": "POST"},
-    guardrails={"max_tokens_per_request": 4096},
+    name="httpbin",
+    binding_type="http",
+    config={"base_url": "https://httpbin.org"},
+    guardrails={"allowed_paths": ["/get", "/status/*"]},
+    credential={"token": "secret"},
 )
 binding_id = resp.data["id"]
 
@@ -161,22 +162,24 @@ bindings = client.bindings.list(agent_id)
 
 # Test connectivity
 result = client.bindings.test(agent_id, binding_id)
-print(result.data["latency_ms"])
 
-# Execute an intent
+# Execute an HTTP intent
 resp = client.bindings.execute(
     agent_id,
-    binding="OpenAI GPT-4",
-    intent_type="chat_completion",
-    params={"model": "gpt-4", "messages": [{"role": "user", "content": "Hello"}]},
+    binding="httpbin",
+    intent_type="http",
+    params={"method": "GET", "path": "/get"},
 )
 print(resp.data["execution_id"])
+
+# Rotate credential (human-only)
+client.bindings.rotate_credential(agent_id, binding_id, credential={"token": "new-secret"})
 
 # List execution history
 events = client.bindings.list_executions(agent_id, limit=20)
 
 # Update guardrails
-client.bindings.update(agent_id, binding_id, guardrails={"max_tokens_per_request": 8192})
+client.bindings.update(agent_id, binding_id, guardrails={"allowed_hosts": ["httpbin.org"]})
 
 # Delete a binding
 client.bindings.delete(agent_id, binding_id)

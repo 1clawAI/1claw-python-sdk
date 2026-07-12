@@ -60,6 +60,20 @@ class BindingsResource:
         """Delete a binding."""
         return self._http.request("DELETE", f"/v1/agents/{agent_id}/bindings/{binding_id}")
 
+    def rotate_credential(
+        self,
+        agent_id: str,
+        binding_id: str,
+        *,
+        credential: dict[str, Any],
+    ) -> OneclawResponse[Any]:
+        """Rotate (overwrite) a binding's stored credential."""
+        return self._http.request(
+            "POST",
+            f"/v1/agents/{agent_id}/bindings/{binding_id}/rotate-credential",
+            body={"credential": credential},
+        )
+
     def test(
         self,
         agent_id: str,
