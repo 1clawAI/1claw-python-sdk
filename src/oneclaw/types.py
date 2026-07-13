@@ -278,6 +278,8 @@ class CreateAgentRequest:
     api_key_expires_at: str | None = None
     execution_intents_enabled: bool | None = None
     execution_guardrails: dict[str, Any] | None = None
+    intents_require_tee: bool | None = None
+    execution_require_tee: bool | None = None
 
 
 @dataclass
@@ -307,6 +309,8 @@ class UpdateAgentRequest:
     api_key_expires_at: str | None = None
     execution_intents_enabled: bool | None = None
     execution_guardrails: dict[str, Any] | None = None
+    intents_require_tee: bool | None = None
+    execution_require_tee: bool | None = None
 
 
 @dataclass
@@ -351,6 +355,8 @@ class AgentResponse:
     treasury_signing_mode: str | None = None
     execution_intents_enabled: bool | None = None
     execution_guardrails: dict[str, Any] | None = None
+    intents_require_tee: bool | None = None
+    execution_require_tee: bool | None = None
 
 
 @dataclass
