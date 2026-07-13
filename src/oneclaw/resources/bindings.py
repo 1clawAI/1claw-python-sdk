@@ -24,6 +24,7 @@ class BindingsResource:
         config: dict[str, Any] | None = None,
         guardrails: dict[str, Any] | None = None,
         credential: dict[str, Any] | None = None,
+        credential_source: dict[str, Any] | None = None,
     ) -> OneclawResponse[Any]:
         """Create a binding for an agent."""
         body: dict[str, Any] = {"name": name, "binding_type": binding_type}
@@ -31,6 +32,7 @@ class BindingsResource:
             "config": config,
             "guardrails": guardrails,
             "credential": credential,
+            "credential_source": credential_source,
         }.items():
             if val is not None:
                 body[key] = val

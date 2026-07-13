@@ -12,13 +12,14 @@ from oneclaw.errors import (
     ServerError,
     ValidationError,
 )
-from oneclaw.types import OneclawClientConfig, OneclawResponse
+from oneclaw.types import CredentialSource, OneclawClientConfig, OneclawResponse
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 
 __all__ = [
     "OneclawClient",
     "create_client",
+    "CredentialSource",
     "OneclawClientConfig",
     "OneclawResponse",
     "OneclawError",

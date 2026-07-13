@@ -146,7 +146,7 @@ resp = client.agents.sign_transaction(
 ### Execution Intents (Bindings)
 
 ```python
-# Create a binding to an external service
+# Create a binding with an inline credential
 resp = client.bindings.create(
     agent_id,
     name="httpbin",
@@ -156,6 +156,19 @@ resp = client.bindings.create(
     credential={"token": "secret"},
 )
 binding_id = resp.data["id"]
+
+# Create a binding with a vault_ref credential (live-pointer to an existing secret)
+resp = client.bindings.create(
+    agent_id,
+    name="stripe-api",
+    binding_type="http",
+    config={"base_url": "https://api.stripe.com"},
+    credential_source={
+        "type": "vault_ref",
+        "vault_id": vault_id,
+        "path": "integrations/stripe-key",
+    },
+)
 
 # List bindings
 bindings = client.bindings.list(agent_id)

@@ -824,12 +824,23 @@ class KnownTokenListResponse:
 # ---------------------------------------------------------------------------
 
 @dataclass
+class CredentialSource:
+    """Credential source: inline value or a live pointer to a vault secret."""
+
+    type: str  # "inline" or "vault_ref"
+    value: dict[str, Any] | None = None
+    vault_id: str | None = None
+    path: str | None = None
+
+
+@dataclass
 class CreateBindingRequest:
     name: str
     binding_type: str
     config: dict[str, Any] | None = None
     guardrails: dict[str, Any] | None = None
     credential: dict[str, Any] | None = None
+    credential_source: CredentialSource | dict[str, Any] | None = None
 
 
 @dataclass
@@ -839,6 +850,7 @@ class UpdateBindingRequest:
     guardrails: dict[str, Any] | None = None
     is_active: bool | None = None
     credential: dict[str, Any] | None = None
+    credential_source: CredentialSource | dict[str, Any] | None = None
 
 
 @dataclass
@@ -850,6 +862,10 @@ class BindingResponse:
     config: dict[str, Any] = field(default_factory=dict)
     guardrails: dict[str, Any] = field(default_factory=dict)
     is_active: bool = True
+    credential_set: bool | None = None
+    credential_source_type: str | None = None
+    credential_vault_id: str | None = None
+    credential_path: str | None = None
     created_at: str | None = None
     updated_at: str | None = None
 
