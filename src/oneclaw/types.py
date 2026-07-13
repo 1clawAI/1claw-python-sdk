@@ -280,6 +280,9 @@ class CreateAgentRequest:
     execution_guardrails: dict[str, Any] | None = None
     intents_require_tee: bool | None = None
     execution_require_tee: bool | None = None
+    tx_max_per_day: int | None = None
+    tx_overhead_budget: dict[str, str] | None = None
+    solana_ata_allowlist: list[str] | None = None
 
 
 @dataclass
@@ -311,6 +314,9 @@ class UpdateAgentRequest:
     execution_guardrails: dict[str, Any] | None = None
     intents_require_tee: bool | None = None
     execution_require_tee: bool | None = None
+    tx_max_per_day: int | None = None
+    tx_overhead_budget: dict[str, str] | None = None
+    solana_ata_allowlist: list[str] | None = None
 
 
 @dataclass
@@ -357,6 +363,12 @@ class AgentResponse:
     execution_guardrails: dict[str, Any] | None = None
     intents_require_tee: bool | None = None
     execution_require_tee: bool | None = None
+    tx_max_per_day: int | None = None
+    tx_overhead_budget: dict[str, str] | None = None
+    solana_ata_allowlist: list[str] | None = None
+    tx_count_today: int | None = None
+    tx_overhead_today_by_chain: dict[str, str] | None = None
+    tx_spent_today_by_chain: dict[str, str] | None = None
 
 
 @dataclass
