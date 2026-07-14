@@ -10,6 +10,7 @@ from oneclaw.resources.audit import AuditResource
 from oneclaw.resources.auth import AuthResource
 from oneclaw.resources.billing import BillingResource
 from oneclaw.resources.bindings import BindingsResource
+from oneclaw.resources.cards import CardsResource
 from oneclaw.resources.chains import ChainsResource
 from oneclaw.resources.org import OrgResource
 from oneclaw.resources.platform import PlatformResource
@@ -76,6 +77,7 @@ class OneclawClient:
         self.webhooks = WebhooksResource(self._http)
         self.risk = RiskResource(self._http)
         self.bindings = BindingsResource(self._http)
+        self.cards = CardsResource(self._http)
 
     def _auto_authenticate_user_key(self, api_key: str) -> None:
         """Exchange a ``1ck_`` user API key for a JWT (fire-and-forget)."""

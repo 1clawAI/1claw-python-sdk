@@ -838,6 +838,82 @@ class KnownTokenListResponse:
 
 
 # ---------------------------------------------------------------------------
+# Payment Cards
+# ---------------------------------------------------------------------------
+
+@dataclass
+class OrderCardRequest:
+    kind: str  # "prepaid" or "gift_card"
+    amount_usd: str
+    laso_server_id: str | None = None
+    country: str | None = None
+
+
+@dataclass
+class CardResponse:
+    id: str
+    issuer: str  # "laso" or "manual"
+    kind: str  # "prepaid" or "gift_card"
+    currency: str
+    status: str  # ordering|pending|ready|depleted|expired|voided|orphaned_payment
+    storage_mode: str  # "reference" or "full"
+    created_at: str
+    updated_at: str
+    agent_id: str | None = None
+    brand: str | None = None
+    last4: str | None = None
+    exp_month: int | None = None
+    exp_year: int | None = None
+    order_amount_usd: str | None = None
+    balance: str | None = None
+    reveal_policy: dict[str, Any] = field(default_factory=dict)
+    void_after: str | None = None
+
+
+@dataclass
+class CardListResponse:
+    cards: list[CardResponse] = field(default_factory=list)
+
+
+@dataclass
+class CardRevealResponse:
+    id: str
+    disclaimer: str
+    pan: str | None = None
+    cvv: str | None = None
+    exp_month: int | None = None
+    exp_year: int | None = None
+    brand: str | None = None
+    redemption: Any | None = None
+
+
+@dataclass
+class UpdateCardRequest:
+    agent_reveal: bool | None = None
+    max_reveals: int | None = None
+    reveal_expires_at: str | None = None
+    void_after: str | None = None
+
+
+@dataclass
+class ImportCardRequest:
+    pan: str
+    cvv: str
+    exp_month: int
+    exp_year: int
+    brand: str | None = None
+    currency: str | None = None
+    balance: str | None = None
+    agent_id: str | None = None
+
+
+@dataclass
+class SearchGiftCardsRequest:
+    query: str | None = None
+    country: str | None = None
+
+
+# ---------------------------------------------------------------------------
 # Execution Intents — Bindings & Execution
 # ---------------------------------------------------------------------------
 
