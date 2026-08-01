@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "oneclaw"
-version = "0.3.3"
+version = "0.42.0"
 description = "Official Python SDK for the 1Claw secrets management platform"
 readme = "README.md"
 license = "MIT"
@@ -12,7 +12,7 @@ requires-python = ">=3.9"
 authors = [
     { name = "1Claw", email = "ops@1claw.xyz" },
 ]
-keywords = ["secrets", "vault", "ai", "agents", "crypto", "signing", "bindings", "execution-intents"]
+keywords = ["secrets", "vault", "ai", "agents", "crypto", "signing", "bindings", "execution-intents", "automations", "memory", "runtimes", "discovery"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",

@@ -8,14 +8,18 @@ from oneclaw.resources.api_keys import ApiKeysResource
 from oneclaw.resources.approvals import ApprovalsResource
 from oneclaw.resources.audit import AuditResource
 from oneclaw.resources.auth import AuthResource
+from oneclaw.resources.automations import AutomationsResource
 from oneclaw.resources.billing import BillingResource
 from oneclaw.resources.bindings import BindingsResource
 from oneclaw.resources.cards import CardsResource
 from oneclaw.resources.chains import ChainsResource
+from oneclaw.resources.discovery import DiscoveryResource
+from oneclaw.resources.memory import MemoryResource
 from oneclaw.resources.org import OrgResource
 from oneclaw.resources.platform import PlatformResource
 from oneclaw.resources.policies import PoliciesResource
 from oneclaw.resources.risk import RiskResource
+from oneclaw.resources.runtimes import RuntimesResource
 from oneclaw.resources.secrets import SecretsResource
 from oneclaw.resources.sharing import SharingResource
 from oneclaw.resources.signing_keys import SigningKeysResource
@@ -78,6 +82,10 @@ class OneclawClient:
         self.risk = RiskResource(self._http)
         self.bindings = BindingsResource(self._http)
         self.cards = CardsResource(self._http)
+        self.automations = AutomationsResource(self._http)
+        self.memory = MemoryResource(self._http)
+        self.runtimes = RuntimesResource(self._http)
+        self.discovery = DiscoveryResource(self._http)
 
     def _auto_authenticate_user_key(self, api_key: str) -> None:
         """Exchange a ``1ck_`` user API key for a JWT (fire-and-forget)."""

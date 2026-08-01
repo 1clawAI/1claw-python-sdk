@@ -300,6 +300,81 @@ client.auth.social_login(provider="google", id_token="...")
 
 > **Note:** For the full API surface (non-EVM transaction signing, spend policies, deposit destinations, fiat ramps, internal accounts, and more), see the [TypeScript SDK](https://www.npmjs.com/package/@1claw/sdk) and the [OpenAPI spec](https://www.npmjs.com/package/@1claw/openapi-spec).
 
+### Automations
+
+```python
+# Create a cron-based automation
+client.automations.create(
+    agent_id,
+    name="rotate-api-key",
+    schedule="0 0 * * 0",  # weekly
+    action_type="secret_rotate",
+    action_config={"path": "api-keys/stripe", "length": 64},
+)
+
+# List automations
+autos = client.automations.list(agent_id)
+
+# Manually trigger
+client.automations.trigger(agent_id, automation_id)
+```
+
+### Agent Memory
+
+```python
+# Store a memory entry
+client.memory.store(agent_id, content="User prefers JSON output format")
+
+# Semantic search
+results = client.memory.search(agent_id, query="output preferences", limit=5)
+
+# List all entries in a namespace
+entries = client.memory.list(agent_id, namespace="preferences")
+
+# Clear memory
+client.memory.clear(agent_id)
+```
+
+### Runtimes
+
+```python
+# Deploy a runtime
+runtime = client.runtimes.create(
+    agent_id=agent_id,
+    name="my-agent-runtime",
+    image="ghcr.io/my-org/agent:latest",
+    env={"MODEL": "gpt-4"},
+    memory_mb=512,
+)
+
+# List runtimes
+runtimes = client.runtimes.list(agent_id=agent_id)
+
+# Get logs
+logs = client.runtimes.logs(runtime_id, limit=100)
+
+# Restart
+client.runtimes.restart(runtime_id)
+```
+
+### Discovery
+
+```python
+# Publish agent to directory
+client.discovery.publish(
+    agent_id,
+    description="Automated treasury management agent",
+    tags=["defi", "treasury", "base"],
+    category="finance",
+)
+
+# Search the directory
+results = client.discovery.search(query="treasury management", tags=["defi"])
+
+# Update listing
+client.discovery.update_listing(agent_id, tags=["defi", "treasury", "ethereum", "base"])
+```
+
 ## Error Handling
 
 ```python
