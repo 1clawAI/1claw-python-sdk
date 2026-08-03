@@ -3,13 +3,14 @@
 from __future__ import annotations
 
 from collections.abc import Sequence
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Union
 
 if TYPE_CHECKING:
     from oneclaw.http_client import HttpClient
     from oneclaw.types import OneclawResponse
 
-WorkflowSpec = dict[str, Any] | Sequence[Any]
+# Union (not |) so module-level alias works on Python 3.9 at import time.
+WorkflowSpec = Union[dict[str, Any], Sequence[Any]]
 
 
 class AutomationsResource:
