@@ -303,20 +303,25 @@ client.auth.social_login(provider="google", id_token="...")
 ### Automations
 
 ```python
-# Create a cron-based automation
+# Create a cron-based automation (workflow_spec required)
 client.automations.create(
-    agent_id,
     name="rotate-api-key",
-    schedule="0 0 * * 0",  # weekly
-    action_type="secret_rotate",
-    action_config={"path": "api-keys/stripe", "length": 64},
+    agent_id=agent_id,
+    trigger_type="cron",
+    cron_expr="0 0 * * 0",  # weekly
+    timezone="UTC",
+    workflow_spec={
+        "steps": [
+            {"type": "log", "action": "run_agent_task", "message": "Rotate weekly API keys"}
+        ]
+    },
 )
 
-# List automations
-autos = client.automations.list(agent_id)
+# List automations in the org
+autos = client.automations.list()
 
 # Manually trigger
-client.automations.trigger(agent_id, automation_id)
+client.automations.trigger(automation_id)
 ```
 
 ### Agent Memory
@@ -342,19 +347,23 @@ client.memory.clear(agent_id)
 runtime = client.runtimes.create(
     agent_id=agent_id,
     name="my-agent-runtime",
-    image="ghcr.io/my-org/agent:latest",
-    env={"MODEL": "gpt-4"},
-    memory_mb=512,
+    template="python",
+    preset="small",
+    env_public={"MODEL": "gpt-4"},
+    shell_access_enabled=True,
 )
 
 # List runtimes
-runtimes = client.runtimes.list(agent_id=agent_id)
+runtimes = client.runtimes.list()
 
-# Get logs
+# Lifecycle
+client.runtimes.start(runtime_id)
 logs = client.runtimes.logs(runtime_id, limit=100)
+client.runtimes.stop(runtime_id)
 
-# Restart
-client.runtimes.restart(runtime_id)
+# Interactive shell (human-only, step-up password / passkey / reauth token)
+session = client.runtimes.create_shell_session(runtime_id, password="...")
+# Connect a WebSocket client to session.data["ws_url"] with the session_token
 ```
 
 ### Discovery
