@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Sequence
 
 if TYPE_CHECKING:
     from oneclaw.http_client import HttpClient
     from oneclaw.types import OneclawResponse
+
+WorkflowSpec = dict[str, Any] | Sequence[Any]
 
 
 class AutomationsResource:
@@ -21,7 +23,7 @@ class AutomationsResource:
         name: str,
         agent_id: str,
         trigger_type: str,
-        workflow_spec: dict[str, Any] | list[Any],
+        workflow_spec: WorkflowSpec,
         cron_expr: str | None = None,
         timezone: str = "UTC",
         event_filter: dict[str, Any] | None = None,
@@ -61,7 +63,7 @@ class AutomationsResource:
         cron_expr: str | None = None,
         timezone: str | None = None,
         event_filter: dict[str, Any] | None = None,
-        workflow_spec: dict[str, Any] | list[Any] | None = None,
+        workflow_spec: WorkflowSpec | None = None,
         is_active: bool | None = None,
     ) -> OneclawResponse[Any]:
         """Update an existing automation."""
