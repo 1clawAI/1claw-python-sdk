@@ -322,6 +322,31 @@ autos = client.automations.list()
 
 # Manually trigger
 client.automations.trigger(automation_id)
+
+# Get a specific run
+run = client.automations.get_run(automation_id, run_id)
+
+# Cancel a running automation (human-only)
+client.automations.cancel_run(automation_id, run_id)
+
+# Browse preset templates (public, no auth)
+presets = client.automations.list_presets()
+```
+
+### Channels
+
+```python
+# Register a Telegram channel for an agent (human-only)
+ch = client.channels.create(agent_id, "telegram", channel_name="Support Bot")
+
+# List channels
+channels = client.channels.list(agent_id)
+
+# Send a message via a channel
+client.channels.send_message(agent_id, channel_id, content="Hello from 1Claw!")
+
+# List message history
+messages = client.channels.list_messages(agent_id, channel_id)
 ```
 
 ### Agent Memory

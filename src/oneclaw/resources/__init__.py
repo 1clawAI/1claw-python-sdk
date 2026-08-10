@@ -10,6 +10,7 @@ from oneclaw.resources.billing import BillingResource
 from oneclaw.resources.bindings import BindingsResource
 from oneclaw.resources.cards import CardsResource
 from oneclaw.resources.chains import ChainsResource
+from oneclaw.resources.channels import ChannelsResource
 from oneclaw.resources.discovery import DiscoveryResource
 from oneclaw.resources.memory import MemoryResource
 from oneclaw.resources.org import OrgResource
@@ -46,6 +47,7 @@ __all__ = [
     "RiskResource",
     "BindingsResource",
     "CardsResource",
+    "ChannelsResource",
     "AutomationsResource",
     "MemoryResource",
     "RuntimesResource",

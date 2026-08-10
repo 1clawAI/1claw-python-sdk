@@ -13,6 +13,7 @@ from oneclaw.resources.billing import BillingResource
 from oneclaw.resources.bindings import BindingsResource
 from oneclaw.resources.cards import CardsResource
 from oneclaw.resources.chains import ChainsResource
+from oneclaw.resources.channels import ChannelsResource
 from oneclaw.resources.discovery import DiscoveryResource
 from oneclaw.resources.memory import MemoryResource
 from oneclaw.resources.org import OrgResource
@@ -82,6 +83,7 @@ class OneclawClient:
         self.risk = RiskResource(self._http)
         self.bindings = BindingsResource(self._http)
         self.cards = CardsResource(self._http)
+        self.channels = ChannelsResource(self._http)
         self.automations = AutomationsResource(self._http)
         self.memory = MemoryResource(self._http)
         self.runtimes = RuntimesResource(self._http)

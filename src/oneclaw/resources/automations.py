@@ -107,3 +107,19 @@ class AutomationsResource:
         return self._http.request(
             "POST", f"/v1/automations/{automation_id}/trigger", body=body
         )
+
+    def get_run(self, automation_id: str, run_id: str) -> OneclawResponse[Any]:
+        """Get a specific automation run by ID."""
+        return self._http.request(
+            "GET", f"/v1/automations/{automation_id}/runs/{run_id}"
+        )
+
+    def cancel_run(self, automation_id: str, run_id: str) -> OneclawResponse[Any]:
+        """Cancel a running or awaiting_approval automation run (human-only)."""
+        return self._http.request(
+            "POST", f"/v1/automations/{automation_id}/runs/{run_id}/cancel"
+        )
+
+    def list_presets(self) -> OneclawResponse[Any]:
+        """List available automation presets (public, no auth required)."""
+        return self._http.request("GET", "/v1/automations/presets")
