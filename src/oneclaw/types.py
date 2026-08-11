@@ -1017,3 +1017,82 @@ class TestBindingResponse:
     success: bool = False
     latency_ms: int = 0
     error: str | None = None
+
+
+# ---------------------------------------------------------------------------
+# OAuth Connected Accounts
+# ---------------------------------------------------------------------------
+
+@dataclass
+class OAuthProviderScope:
+    name: str
+    description: str | None = None
+    required: bool | None = None
+
+
+@dataclass
+class OAuthProvider:
+    slug: str
+    name: str
+    auth_url: str | None = None
+    token_url: str | None = None
+    scopes: list[OAuthProviderScope] = field(default_factory=list)
+    logo_url: str | None = None
+
+
+@dataclass
+class OAuthProviderListResponse:
+    providers: list[OAuthProvider] = field(default_factory=list)
+
+
+@dataclass
+class OAuthConnection:
+    id: str
+    agent_id: str
+    provider_slug: str
+    status: str | None = None
+    scopes: list[str] = field(default_factory=list)
+    external_account_id: str | None = None
+    external_account_name: str | None = None
+    created_at: str | None = None
+    expires_at: str | None = None
+
+
+@dataclass
+class OAuthConnectionListResponse:
+    connections: list[OAuthConnection] = field(default_factory=list)
+
+
+@dataclass
+class ConnectOAuthRequest:
+    provider_slug: str
+    scopes: list[str] | None = None
+    redirect_after: str | None = None
+
+
+@dataclass
+class ConnectOAuthResponse:
+    authorize_url: str | None = None
+    connection_id: str | None = None
+    state: str | None = None
+
+
+@dataclass
+class OAuthAppCredential:
+    provider_slug: str
+    client_id: str
+    redirect_uri: str | None = None
+    created_at: str | None = None
+
+
+@dataclass
+class OAuthAppCredentialListResponse:
+    credentials: list[OAuthAppCredential] = field(default_factory=list)
+
+
+@dataclass
+class SaveOAuthAppCredentialsRequest:
+    provider_slug: str
+    client_id: str
+    client_secret: str
+    redirect_uri: str | None = None

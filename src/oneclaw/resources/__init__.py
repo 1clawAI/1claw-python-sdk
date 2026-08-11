@@ -13,6 +13,7 @@ from oneclaw.resources.chains import ChainsResource
 from oneclaw.resources.channels import ChannelsResource
 from oneclaw.resources.discovery import DiscoveryResource
 from oneclaw.resources.memory import MemoryResource
+from oneclaw.resources.oauth_connect import OAuthConnectResource
 from oneclaw.resources.org import OrgResource
 from oneclaw.resources.platform import PlatformResource
 from oneclaw.resources.policies import PoliciesResource
@@ -50,6 +51,7 @@ __all__ = [
     "ChannelsResource",
     "AutomationsResource",
     "MemoryResource",
+    "OAuthConnectResource",
     "RuntimesResource",
     "DiscoveryResource",
 ]

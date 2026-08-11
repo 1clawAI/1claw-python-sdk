@@ -16,6 +16,7 @@ from oneclaw.resources.chains import ChainsResource
 from oneclaw.resources.channels import ChannelsResource
 from oneclaw.resources.discovery import DiscoveryResource
 from oneclaw.resources.memory import MemoryResource
+from oneclaw.resources.oauth_connect import OAuthConnectResource
 from oneclaw.resources.org import OrgResource
 from oneclaw.resources.platform import PlatformResource
 from oneclaw.resources.policies import PoliciesResource
@@ -88,6 +89,7 @@ class OneclawClient:
         self.memory = MemoryResource(self._http)
         self.runtimes = RuntimesResource(self._http)
         self.discovery = DiscoveryResource(self._http)
+        self.oauth_connect = OAuthConnectResource(self._http)
 
     def _auto_authenticate_user_key(self, api_key: str) -> None:
         """Exchange a ``1ck_`` user API key for a JWT (fire-and-forget)."""
