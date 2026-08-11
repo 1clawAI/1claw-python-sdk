@@ -14,7 +14,7 @@ from oneclaw.errors import (
 )
 from oneclaw.types import CredentialSource, OneclawClientConfig, OneclawResponse
 
-__version__ = "0.43.4"
+__version__ = "0.44.0"
 
 __all__ = [
     "OneclawClient",

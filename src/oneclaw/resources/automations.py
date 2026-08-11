@@ -120,6 +120,12 @@ class AutomationsResource:
             "POST", f"/v1/automations/{automation_id}/runs/{run_id}/cancel"
         )
 
+    def rotate_webhook_token(self, automation_id: str) -> OneclawResponse[Any]:
+        """Rotate the webhook trigger token (human-only)."""
+        return self._http.request(
+            "POST", f"/v1/automations/{automation_id}/rotate-webhook-token",
+        )
+
     def list_presets(self) -> OneclawResponse[Any]:
         """List available automation presets (public, no auth required)."""
         return self._http.request("GET", "/v1/automations/presets")

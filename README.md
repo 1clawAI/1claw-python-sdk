@@ -352,17 +352,26 @@ messages = client.channels.list_messages(agent_id, channel_id)
 ### Agent Memory
 
 ```python
-# Store a memory entry
-client.memory.store(agent_id, content="User prefers JSON output format")
+# Store a memory entry (namespace + key)
+client.memory.put(agent_id, "preferences", "output_format", value="JSON")
 
-# Semantic search
-results = client.memory.search(agent_id, query="output preferences", limit=5)
+# Get a specific entry
+entry = client.memory.get(agent_id, "preferences", "output_format")
 
-# List all entries in a namespace
-entries = client.memory.list(agent_id, namespace="preferences")
+# Semantic search within a namespace
+results = client.memory.search(agent_id, namespace="preferences", query="output format", top_k=5)
 
-# Clear memory
-client.memory.clear(agent_id)
+# List entries in a namespace
+entries = client.memory.list(agent_id, "preferences")
+
+# List all namespaces
+namespaces = client.memory.list_namespaces(agent_id)
+
+# Delete an entry
+client.memory.delete(agent_id, "preferences", "output_format")
+
+# Delete an entire namespace
+client.memory.delete_namespace(agent_id, "preferences")
 ```
 
 ### Runtimes

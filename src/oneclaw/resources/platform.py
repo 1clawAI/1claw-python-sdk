@@ -88,6 +88,19 @@ class PlatformResource:
         """List templates for a platform app."""
         return self._http.request("GET", f"/v1/platform/apps/{app_id}/templates")
 
+    def update_template(self, app_id: str, template_id: str, **kwargs: Any) -> OneclawResponse[Any]:
+        """Update a platform template."""
+        body = {k: v for k, v in kwargs.items() if v is not None}
+        return self._http.request(
+            "PATCH", f"/v1/platform/apps/{app_id}/templates/{template_id}", body=body,
+        )
+
+    def delete_template(self, app_id: str, template_id: str) -> OneclawResponse[Any]:
+        """Delete a platform template."""
+        return self._http.request(
+            "DELETE", f"/v1/platform/apps/{app_id}/templates/{template_id}",
+        )
+
     # -- User provisioning -----------------------------------------------------
 
     def upsert_user(
@@ -144,6 +157,25 @@ class PlatformResource:
     def claim_redeem(self, token: str) -> OneclawResponse[Any]:
         """Redeem a one-time claim token (public)."""
         return self._http.request("POST", f"/v1/platform/claim/{token}", skip_auth=True)
+
+    # -- Grants ----------------------------------------------------------------
+
+    def grant_resources(self, connection_id: str, **kwargs: Any) -> OneclawResponse[Any]:
+        """Grant platform access to user resources."""
+        body = {k: v for k, v in kwargs.items() if v is not None}
+        return self._http.request(
+            "POST", f"/v1/platform/connections/{connection_id}/grant", body=body,
+        )
+
+    def list_grants(self, connection_id: str) -> OneclawResponse[Any]:
+        """List grants for a connection."""
+        return self._http.request("GET", f"/v1/platform/connections/{connection_id}/grants")
+
+    def revoke_grant(self, connection_id: str, grant_id: str) -> OneclawResponse[Any]:
+        """Revoke a specific grant."""
+        return self._http.request(
+            "DELETE", f"/v1/platform/connections/{connection_id}/grants/{grant_id}",
+        )
 
     # -- Spend policies --------------------------------------------------------
 

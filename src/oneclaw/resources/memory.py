@@ -10,77 +10,70 @@ if TYPE_CHECKING:
 
 
 class MemoryResource:
-    """Persistent vector memory for agents."""
+    """Three-tier memory (scratch / durable / semantic) for agents."""
 
     def __init__(self, http: HttpClient) -> None:
         self._http = http
 
-    def store(
+    def put(
         self,
         agent_id: str,
+        namespace: str,
+        key: str,
         *,
-        content: str,
-        metadata: dict[str, Any] | None = None,
-        namespace: str | None = None,
+        value: str,
+        tier: str = "durable",
+        ttl_secs: int | None = None,
     ) -> OneclawResponse[Any]:
-        """Store a memory entry with automatic embedding."""
-        body: dict[str, Any] = {"content": content}
-        if metadata is not None:
-            body["metadata"] = metadata
-        if namespace is not None:
-            body["namespace"] = namespace
-        return self._http.request("POST", f"/v1/agents/{agent_id}/memory", body=body)
+        """Store or upsert a memory entry."""
+        body: dict[str, Any] = {"value": value, "tier": tier}
+        if ttl_secs is not None:
+            body["ttl_secs"] = ttl_secs
+        return self._http.request(
+            "PUT", f"/v1/agents/{agent_id}/memory/{namespace}/{key}", body=body,
+        )
+
+    # Legacy alias
+    store = put
+
+    def get(self, agent_id: str, namespace: str, key: str) -> OneclawResponse[Any]:
+        """Get a specific memory entry."""
+        return self._http.request(
+            "GET", f"/v1/agents/{agent_id}/memory/{namespace}/{key}",
+        )
+
+    def delete(self, agent_id: str, namespace: str, key: str) -> OneclawResponse[Any]:
+        """Delete a memory entry."""
+        return self._http.request(
+            "DELETE", f"/v1/agents/{agent_id}/memory/{namespace}/{key}",
+        )
+
+    def list(self, agent_id: str, namespace: str) -> OneclawResponse[Any]:
+        """List entries in a namespace."""
+        return self._http.request("GET", f"/v1/agents/{agent_id}/memory/{namespace}")
+
+    def list_namespaces(self, agent_id: str) -> OneclawResponse[Any]:
+        """List namespaces for an agent."""
+        return self._http.request("GET", f"/v1/agents/{agent_id}/memory")
 
     def search(
         self,
         agent_id: str,
         *,
+        namespace: str,
         query: str,
-        limit: int | None = None,
-        namespace: str | None = None,
-        threshold: float | None = None,
+        top_k: int | None = None,
     ) -> OneclawResponse[Any]:
-        """Search memory entries by semantic similarity."""
-        body: dict[str, Any] = {"query": query}
-        if limit is not None:
-            body["limit"] = limit
-        if namespace is not None:
-            body["namespace"] = namespace
-        if threshold is not None:
-            body["threshold"] = threshold
-        return self._http.request("POST", f"/v1/agents/{agent_id}/memory/search", body=body)
-
-    def list(
-        self,
-        agent_id: str,
-        *,
-        namespace: str | None = None,
-        limit: int | None = None,
-        offset: int | None = None,
-    ) -> OneclawResponse[Any]:
-        """List memory entries for an agent."""
-        query: dict[str, Any] = {}
-        if namespace is not None:
-            query["namespace"] = namespace
-        if limit is not None:
-            query["limit"] = limit
-        if offset is not None:
-            query["offset"] = offset
+        """Semantic search over agent memory."""
+        body: dict[str, Any] = {"namespace": namespace, "query": query}
+        if top_k is not None:
+            body["top_k"] = top_k
         return self._http.request(
-            "GET", f"/v1/agents/{agent_id}/memory", query=query or None
+            "POST", f"/v1/agents/{agent_id}/memory/search", body=body,
         )
 
-    def get(self, agent_id: str, entry_id: str) -> OneclawResponse[Any]:
-        """Get a specific memory entry."""
-        return self._http.request("GET", f"/v1/agents/{agent_id}/memory/{entry_id}")
-
-    def delete(self, agent_id: str, entry_id: str) -> OneclawResponse[Any]:
-        """Delete a memory entry."""
-        return self._http.request("DELETE", f"/v1/agents/{agent_id}/memory/{entry_id}")
-
-    def clear(self, agent_id: str, *, namespace: str | None = None) -> OneclawResponse[Any]:
-        """Clear all memory entries for an agent (optionally within a namespace)."""
-        body: dict[str, Any] = {}
-        if namespace is not None:
-            body["namespace"] = namespace
-        return self._http.request("POST", f"/v1/agents/{agent_id}/memory/clear", body=body)
+    def delete_namespace(self, agent_id: str, namespace: str) -> OneclawResponse[Any]:
+        """Delete an entire namespace."""
+        return self._http.request(
+            "DELETE", f"/v1/agents/{agent_id}/memory/{namespace}",
+        )
