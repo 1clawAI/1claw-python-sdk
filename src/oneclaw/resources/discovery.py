@@ -1,4 +1,4 @@
-"""Discovery resource."""
+"""Discovery resource — agent directory and inter-agent communication."""
 
 from __future__ import annotations
 
@@ -10,86 +10,90 @@ if TYPE_CHECKING:
 
 
 class DiscoveryResource:
-    """Agent discovery and directory listing."""
+    """Agent discovery, org directory, and inter-agent task delegation."""
 
     def __init__(self, http: HttpClient) -> None:
         self._http = http
 
-    def publish(
-        self,
-        agent_id: str,
-        *,
-        description: str,
-        tags: list[str] | None = None,
-        category: str | None = None,
-        website_url: str | None = None,
-        is_public: bool = True,
-    ) -> OneclawResponse[Any]:
-        """Publish an agent to the discovery directory."""
-        body: dict[str, Any] = {
-            "description": description,
-            "is_public": is_public,
-        }
-        if tags is not None:
-            body["tags"] = tags
-        if category is not None:
-            body["category"] = category
-        if website_url is not None:
-            body["website_url"] = website_url
-        return self._http.request(
-            "POST", f"/v1/agents/{agent_id}/discovery", body=body
-        )
+    def get_agent_card(self, agent_id: str) -> OneclawResponse[Any]:
+        """Get an agent's public discovery card (no auth required)."""
+        return self._http.request("GET", f"/v1/agents/{agent_id}/card", skip_auth=True)
 
-    def unpublish(self, agent_id: str) -> OneclawResponse[Any]:
-        """Remove an agent from the discovery directory."""
-        return self._http.request("DELETE", f"/v1/agents/{agent_id}/discovery")
-
-    def get_listing(self, agent_id: str) -> OneclawResponse[Any]:
-        """Get the discovery listing for an agent."""
-        return self._http.request("GET", f"/v1/agents/{agent_id}/discovery")
-
-    def update_listing(
-        self,
-        agent_id: str,
-        *,
-        description: str | None = None,
-        tags: list[str] | None = None,
-        category: str | None = None,
-        is_public: bool | None = None,
-    ) -> OneclawResponse[Any]:
-        """Update an agent's discovery listing."""
-        body: dict[str, Any] = {}
-        if description is not None:
-            body["description"] = description
-        if tags is not None:
-            body["tags"] = tags
-        if category is not None:
-            body["category"] = category
-        if is_public is not None:
-            body["is_public"] = is_public
-        return self._http.request(
-            "PATCH", f"/v1/agents/{agent_id}/discovery", body=body
-        )
-
-    def search(
+    def directory(
         self,
         *,
         query: str | None = None,
         tags: list[str] | None = None,
-        category: str | None = None,
-        limit: int | None = None,
-        offset: int | None = None,
+        page: int | None = None,
+        page_size: int | None = None,
     ) -> OneclawResponse[Any]:
-        """Search the agent discovery directory."""
+        """Search the public agent directory."""
         params: dict[str, Any] = {}
         if query is not None:
             params["q"] = query
         if tags is not None:
             params["tags"] = ",".join(tags)
+        if page is not None:
+            params["page"] = page
+        if page_size is not None:
+            params["page_size"] = page_size
+        return self._http.request(
+            "GET", "/v1/agents/directory", query=params or None, skip_auth=True
+        )
+
+    def org_directory(
+        self,
+        *,
+        query: str | None = None,
+        tags: list[str] | None = None,
+        page: int | None = None,
+        page_size: int | None = None,
+    ) -> OneclawResponse[Any]:
+        """List agents in the caller's organization for sub-agent discovery."""
+        params: dict[str, Any] = {}
+        if query is not None:
+            params["q"] = query
+        if tags is not None:
+            params["tags"] = ",".join(tags)
+        if page is not None:
+            params["page"] = page
+        if page_size is not None:
+            params["page_size"] = page_size
+        return self._http.request("GET", "/v1/agents/org-directory", query=params or None)
+
+    def update_discovery(self, agent_id: str, **kwargs: Any) -> OneclawResponse[Any]:
+        """Update an agent's discovery settings (human-only)."""
+        body = {k: v for k, v in kwargs.items() if v is not None}
+        return self._http.request("PATCH", f"/v1/agents/{agent_id}/discovery", body=body)
+
+    def marketplace(
+        self,
+        *,
+        query: str | None = None,
+        category: str | None = None,
+    ) -> OneclawResponse[Any]:
+        """Search the platform marketplace."""
+        params: dict[str, Any] = {}
+        if query is not None:
+            params["q"] = query
         if category is not None:
             params["category"] = category
-        if limit is not None:
-            params["limit"] = limit
-        if offset is not None:
-            params["offset"] = offset
-        return self._http.request("GET", "/v1/directory", query=params or None)
+        return self._http.request(
+            "GET", "/v1/platform/marketplace", query=params or None, skip_auth=True
+        )
+
+    def delegate_task(
+        self,
+        agent_id: str,
+        *,
+        message: str,
+        model: str | None = None,
+        provider: str | None = None,
+    ) -> OneclawResponse[Any]:
+        """Send a task to another agent via chat (inter-agent communication)."""
+        body: dict[str, Any] = {"message": message, "mode": "llm"}
+        if model is not None:
+            body["model"] = model
+        if provider is not None:
+            body["provider"] = provider
+        return self._http.request("POST", f"/v1/agents/{agent_id}/chat", body=body)
