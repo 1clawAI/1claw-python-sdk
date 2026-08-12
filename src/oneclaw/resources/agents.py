@@ -239,7 +239,11 @@ class AgentsResource:
     ) -> OneclawResponse[Any]:
         """Update a delegation (human-only)."""
         body = {k: v for k, v in kwargs.items() if v is not None}
-        return self._http.request("PATCH", f"/v1/agents/{agent_id}/delegations/{delegation_id}", body=body)
+        return self._http.request(
+            "PATCH",
+            f"/v1/agents/{agent_id}/delegations/{delegation_id}",
+            body=body,
+        )
 
     def revoke_delegation(self, agent_id: str, delegation_id: str) -> OneclawResponse[Any]:
         """Revoke (delete) a delegation (human-only)."""
