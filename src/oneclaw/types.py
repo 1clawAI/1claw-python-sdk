@@ -1096,3 +1096,84 @@ class SaveOAuthAppCredentialsRequest:
     client_id: str
     client_secret: str
     redirect_uri: str | None = None
+
+
+# ---------------------------------------------------------------------------
+# Agent Channels (Telegram, WhatsApp, Discord)
+# ---------------------------------------------------------------------------
+
+
+@dataclass
+class CreateChannelRequest:
+    channel_type: str
+    channel_name: str | None = None
+    config: dict[str, Any] | None = None
+    slash_commands_enabled: bool | None = None
+    voice_transcription_enabled: bool | None = None
+
+
+@dataclass
+class UpdateChannelRequest:
+    channel_name: str | None = None
+    is_active: bool | None = None
+    config: dict[str, Any] | None = None
+    auto_respond_enabled: bool | None = None
+    sender_allowlist: list[str] | None = None
+    slash_commands_enabled: bool | None = None
+    voice_transcription_enabled: bool | None = None
+
+
+@dataclass
+class ChannelResponse:
+    id: str
+    org_id: str = ""
+    agent_id: str = ""
+    channel_type: str = ""
+    channel_name: str | None = None
+    webhook_path: str | None = None
+    webhook_url: str | None = None
+    webhook_secret: str | None = None
+    is_active: bool = True
+    slash_commands_enabled: bool | None = None
+    voice_transcription_enabled: bool | None = None
+    unified_conversation_id: str | None = None
+    is_home_platform: bool | None = None
+    sender_allowlist: list[str] | None = None
+    auto_respond_enabled: bool | None = None
+    metadata: dict[str, Any] | None = None
+    created_at: str | None = None
+    updated_at: str | None = None
+
+
+@dataclass
+class ChannelListResponse:
+    channels: list[ChannelResponse] = field(default_factory=list)
+
+
+@dataclass
+class SendChannelMessageRequest:
+    external_chat_id: str
+    content: str
+    reply_to: str | None = None
+
+
+@dataclass
+class ChannelMessageResponse:
+    id: str
+    channel_id: str = ""
+    direction: str = ""
+    external_chat_id: str = ""
+    external_message_id: str | None = None
+    sender_name: str | None = None
+    content: str = ""
+    media_url: str | None = None
+    is_voice_message: bool | None = None
+    voice_file_id: str | None = None
+    voice_duration_secs: float | None = None
+    transcription_status: str | None = None
+    created_at: str | None = None
+
+
+@dataclass
+class ChannelMessageListResponse:
+    messages: list[ChannelMessageResponse] = field(default_factory=list)
