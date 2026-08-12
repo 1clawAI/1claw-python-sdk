@@ -95,6 +95,26 @@ api_key = resp.data["api_key"]  # Save this — shown only once
 client.agents.enroll("my-agent", "admin@example.com")
 ```
 
+### Agent Delegation
+
+```python
+# Create a delegation (human-only)
+client.agents.create_delegation(
+    orchestrator_id,
+    delegate_id=sub_agent_id,
+    allowed_tools=["delegate_task"],
+    max_daily_delegations=100,
+    delegation_mode="caller",
+)
+
+# List and query delegations
+delegations = client.agents.list_delegations(agent_id)
+effective = client.agents.get_effective_delegations(agent_id)
+
+# Revoke a delegation
+client.agents.revoke_delegation(agent_id, delegation_id)
+```
+
 ### Access Policies
 
 ```python

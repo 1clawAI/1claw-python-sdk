@@ -196,6 +196,59 @@ class AgentsResource:
         body = {k: v for k, v in kwargs.items() if v is not None}
         return self._http.request("POST", f"/v1/agents/{agent_id}/sign", body=body)
 
+    # -- Delegations -----------------------------------------------------------
+
+    def create_delegation(
+        self,
+        agent_id: str,
+        *,
+        delegate_id: str,
+        allowed_tools: builtins.list[str] | None = None,
+        blocked_tools: builtins.list[str] | None = None,
+        max_daily_delegations: int | None = None,
+        max_depth: int | None = None,
+        guardrails: dict[str, Any] | None = None,
+        delegation_mode: str | None = None,
+        expires_at: str | None = None,
+    ) -> OneclawResponse[Any]:
+        """Create a delegation from this agent to another (human-only)."""
+        body: dict[str, Any] = {"delegate_id": delegate_id}
+        for key, val in {
+            "allowed_tools": allowed_tools,
+            "blocked_tools": blocked_tools,
+            "max_daily_delegations": max_daily_delegations,
+            "max_depth": max_depth,
+            "guardrails": guardrails,
+            "delegation_mode": delegation_mode,
+            "expires_at": expires_at,
+        }.items():
+            if val is not None:
+                body[key] = val
+        return self._http.request("POST", f"/v1/agents/{agent_id}/delegations", body=body)
+
+    def list_delegations(self, agent_id: str) -> OneclawResponse[Any]:
+        """List all delegations for an agent."""
+        return self._http.request("GET", f"/v1/agents/{agent_id}/delegations")
+
+    def get_delegation(self, agent_id: str, delegation_id: str) -> OneclawResponse[Any]:
+        """Get a specific delegation by ID."""
+        return self._http.request("GET", f"/v1/agents/{agent_id}/delegations/{delegation_id}")
+
+    def update_delegation(
+        self, agent_id: str, delegation_id: str, **kwargs: Any
+    ) -> OneclawResponse[Any]:
+        """Update a delegation (human-only)."""
+        body = {k: v for k, v in kwargs.items() if v is not None}
+        return self._http.request("PATCH", f"/v1/agents/{agent_id}/delegations/{delegation_id}", body=body)
+
+    def revoke_delegation(self, agent_id: str, delegation_id: str) -> OneclawResponse[Any]:
+        """Revoke (delete) a delegation (human-only)."""
+        return self._http.request("DELETE", f"/v1/agents/{agent_id}/delegations/{delegation_id}")
+
+    def get_effective_delegations(self, agent_id: str) -> OneclawResponse[Any]:
+        """Get effective delegations for an agent (used for runtime tool discovery)."""
+        return self._http.request("GET", f"/v1/agents/{agent_id}/delegations/effective")
+
     # -- Smart accounts --------------------------------------------------------
 
     def add_smart_account(
