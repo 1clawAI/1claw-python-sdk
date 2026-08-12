@@ -1,10 +1,16 @@
 # 1Claw Python SDK
 
-Official Python SDK for the [1Claw](https://1claw.xyz) secrets management platform.
+Official Python client for the [1Claw](https://1claw.xyz) Vault API.
 
 [![PyPI version](https://img.shields.io/pypi/v/oneclaw.svg)](https://pypi.org/project/oneclaw/)
 [![Python versions](https://img.shields.io/pypi/pyversions/oneclaw.svg)](https://pypi.org/project/oneclaw/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+Use this SDK when you're writing Python services, cron jobs, or agent backends that talk to 1Claw directly. It covers vaults, secrets, agents, policies, the Intents API, execution bindings, billing, and the rest of the REST surface.
+
+Agent keys (`ocv_`) auto-exchange for short-lived JWTs and refresh before expiry. User keys (`1ck_`) work the same way. You do not need to hand-roll token rotation or parse error responses from scratch.
+
+If you're using LangChain or CrewAI, consider [`langchain-1claw`](https://pypi.org/project/langchain-1claw/) or [`1claw-crewai-tools`](https://pypi.org/project/1claw-crewai-tools/) instead. They wrap this client as framework tools. This package is the low-level building block.
 
 ## Installation
 
