@@ -200,3 +200,65 @@ class PlatformResource:
         return self._http.request(
             "DELETE", f"/v1/platform/apps/{app_id}/spend-policies/{policy_id}",
         )
+
+    # -- Marketplace & stats ---------------------------------------------------
+
+    def marketplace(
+        self,
+        *,
+        page: int | None = None,
+        per_page: int | None = None,
+        q: str | None = None,
+        category: str | None = None,
+    ) -> OneclawResponse[Any]:
+        """Browse the public platform marketplace (no auth required).
+
+        Parameters
+        ----------
+        page : int, optional
+            Page number for pagination.
+        per_page : int, optional
+            Results per page.
+        q : str, optional
+            Free-text search query.
+        category : str, optional
+            Filter by app category.
+        """
+        params: dict[str, Any] = {}
+        if page is not None:
+            params["page"] = page
+        if per_page is not None:
+            params["per_page"] = per_page
+        if q is not None:
+            params["q"] = q
+        if category is not None:
+            params["category"] = category
+        return self._http.request(
+            "GET", "/v1/platform/marketplace", query=params or None, skip_auth=True,
+        )
+
+    def get_app_stats(self, app_id: str) -> OneclawResponse[Any]:
+        """Get aggregate statistics for a platform app.
+
+        Returns connection counts, bootstrap totals, and grant summaries.
+
+        Parameters
+        ----------
+        app_id : str
+            The platform app UUID.
+        """
+        return self._http.request("GET", f"/v1/platform/apps/{app_id}/stats")
+
+    def rotate_webhook_secret(self, app_id: str) -> OneclawResponse[Any]:
+        """Rotate a platform app's webhook signing secret.
+
+        Returns the new secret (shown only once).
+
+        Parameters
+        ----------
+        app_id : str
+            The platform app UUID.
+        """
+        return self._http.request(
+            "POST", f"/v1/platform/apps/{app_id}/rotate-webhook-secret",
+        )

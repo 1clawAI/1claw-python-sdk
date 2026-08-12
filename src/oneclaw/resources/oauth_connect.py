@@ -115,3 +115,39 @@ class OAuthConnectResource:
             "DELETE",
             f"/v1/agents/{agent_id}/oauth/app-credentials/{provider_slug}",
         )
+
+    # -- OAuth2 Authorization Server token/consent management ------------------
+
+    def revoke_token(
+        self,
+        token: str,
+        token_type_hint: str | None = None,
+    ) -> OneclawResponse[Any]:
+        """Revoke an OAuth access or refresh token (RFC 7009).
+
+        Parameters
+        ----------
+        token : str
+            The token to revoke.
+        token_type_hint : str, optional
+            Hint about the token type: ``"access_token"`` or ``"refresh_token"``.
+        """
+        body: dict[str, Any] = {"token": token}
+        if token_type_hint is not None:
+            body["token_type_hint"] = token_type_hint
+        return self._http.request("POST", "/v1/oauth/revoke", body=body)
+
+    def revoke_consent(self, app_id: str) -> OneclawResponse[Any]:
+        """Revoke OAuth consent for a platform app.
+
+        Deletes the consent record and revokes all active tokens issued to
+        the app for the calling user.
+
+        Parameters
+        ----------
+        app_id : str
+            The platform app UUID whose consent should be revoked.
+        """
+        return self._http.request(
+            "DELETE", f"/v1/oauth/consents/{app_id}"
+        )

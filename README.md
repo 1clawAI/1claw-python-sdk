@@ -260,6 +260,15 @@ conn = client.platform.upsert_user(email="user@example.com")
 
 # Bootstrap resources from a template
 bootstrap = client.platform.bootstrap_user(conn.data["connection_id"])
+
+# Browse the public marketplace (no auth required)
+apps = client.platform.marketplace(category="finance")
+
+# Get app stats (connections, bootstraps, grants)
+stats = client.platform.get_app_stats(app_id)
+
+# Rotate webhook signing secret (returns new secret once)
+secret = client.platform.rotate_webhook_secret(app_id)
 ```
 
 ### Webhooks
@@ -302,6 +311,12 @@ client.auth.send_email_otp("user@example.com")
 resp = client.auth.verify_email_otp("user@example.com", "123456")
 
 client.auth.social_login(provider="google", id_token="...")
+
+# Revoke an OAuth token (RFC 7009)
+client.oauth_connect.revoke_token("eyJ...", token_type_hint="access_token")
+
+# Revoke consent for a platform app (deletes consent + revokes all tokens)
+client.oauth_connect.revoke_consent(app_id)
 ```
 
 > **Note:** For the full API surface (non-EVM transaction signing, spend policies, deposit destinations, fiat ramps, internal accounts, and more), see the [TypeScript SDK](https://www.npmjs.com/package/@1claw/sdk) and the [OpenAPI spec](https://www.npmjs.com/package/@1claw/openapi-spec).
