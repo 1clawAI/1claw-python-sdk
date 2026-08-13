@@ -18,7 +18,7 @@ from oneclaw.resources.portfolio import PortfolioResource
 from oneclaw.resources.sub_orgs import SubOrgsResource
 from oneclaw.types import CredentialSource, OneclawClientConfig, OneclawResponse
 
-__version__ = "0.47.0"
+__version__ = "0.47.3"
 
 __all__ = [
     "OneclawClient",

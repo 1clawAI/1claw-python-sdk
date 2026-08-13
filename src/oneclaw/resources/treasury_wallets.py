@@ -17,7 +17,10 @@ class TreasuryWalletsResource:
         self._http = http
 
     def generate(self, chains: builtins.list[str] | None = None) -> OneclawResponse[Any]:
-        """Generate wallets for specified chains (or all 6 if omitted)."""
+        """Generate wallets for specified chains (or all 6 if omitted).
+
+        Available on all tiers; counted against the org wallet quota.
+        """
         body: dict[str, Any] = {}
         if chains:
             body["chains"] = chains
