@@ -12,19 +12,23 @@ from oneclaw.resources.automations import AutomationsResource
 from oneclaw.resources.billing import BillingResource
 from oneclaw.resources.bindings import BindingsResource
 from oneclaw.resources.cards import CardsResource
+from oneclaw.resources.cedar_policies import CedarPoliciesResource
 from oneclaw.resources.chains import ChainsResource
 from oneclaw.resources.channels import ChannelsResource
 from oneclaw.resources.discovery import DiscoveryResource
 from oneclaw.resources.memory import MemoryResource
 from oneclaw.resources.oauth_connect import OAuthConnectResource
+from oneclaw.resources.opa_policies import OpaPoliciesResource
 from oneclaw.resources.org import OrgResource
 from oneclaw.resources.platform import PlatformResource
 from oneclaw.resources.policies import PoliciesResource
+from oneclaw.resources.portfolio import PortfolioResource
 from oneclaw.resources.risk import RiskResource
 from oneclaw.resources.runtimes import RuntimesResource
 from oneclaw.resources.secrets import SecretsResource
 from oneclaw.resources.sharing import SharingResource
 from oneclaw.resources.signing_keys import SigningKeysResource
+from oneclaw.resources.sub_orgs import SubOrgsResource
 from oneclaw.resources.treasury import TreasuryResource
 from oneclaw.resources.treasury_wallets import TreasuryWalletsResource
 from oneclaw.resources.vaults import VaultResource
@@ -69,6 +73,10 @@ class OneclawClient:
         self.secrets = SecretsResource(self._http)
         self.agents = AgentsResource(self._http)
         self.policies = PoliciesResource(self._http)
+        self.cedar_policies = CedarPoliciesResource(self._http)
+        self.opa_policies = OpaPoliciesResource(self._http)
+        self.sub_orgs = SubOrgsResource(self._http)
+        self.portfolio = PortfolioResource(self._http)
         self.chains = ChainsResource(self._http)
         self.sharing = SharingResource(self._http)
         self.billing = BillingResource(self._http)

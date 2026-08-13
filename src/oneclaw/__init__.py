@@ -12,13 +12,21 @@ from oneclaw.errors import (
     ServerError,
     ValidationError,
 )
+from oneclaw.resources.cedar_policies import CedarPoliciesResource
+from oneclaw.resources.opa_policies import OpaPoliciesResource
+from oneclaw.resources.portfolio import PortfolioResource
+from oneclaw.resources.sub_orgs import SubOrgsResource
 from oneclaw.types import CredentialSource, OneclawClientConfig, OneclawResponse
 
-__version__ = "0.46.0"
+__version__ = "0.47.0"
 
 __all__ = [
     "OneclawClient",
     "create_client",
+    "CedarPoliciesResource",
+    "OpaPoliciesResource",
+    "PortfolioResource",
+    "SubOrgsResource",
     "CredentialSource",
     "OneclawClientConfig",
     "OneclawResponse",

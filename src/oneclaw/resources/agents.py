@@ -277,6 +277,27 @@ class AgentsResource:
             body["init_data"] = init_data
         return self._http.request("POST", f"/v1/agents/{agent_id}/smart-accounts", body=body)
 
+    def import_smart_account(
+        self,
+        agent_id: str,
+        *,
+        chain: str,
+        chain_id: int,
+        safe_address: str,
+        verify: bool = True,
+    ) -> OneclawResponse[Any]:
+        """Import an existing Safe smart account for an agent."""
+        return self._http.request(
+            "POST",
+            f"/v1/agents/{agent_id}/smart-accounts/import",
+            body={
+                "chain": chain,
+                "chain_id": chain_id,
+                "safe_address": safe_address,
+                "verify": verify,
+            },
+        )
+
     # -- Bankr keys ------------------------------------------------------------
 
     def lease_bankr_key(

@@ -97,3 +97,19 @@ class TreasuryWalletsResource:
     def get_effective_spend_policy(self) -> OneclawResponse[Any]:
         """View the effective spend policy for the calling user."""
         return self._http.request("GET", "/v1/treasury/wallets/spend-policy")
+
+    def import_wallet(
+        self,
+        chain: str,
+        *,
+        private_key: str,
+        format: str = "hex",
+        password: str,
+    ) -> OneclawResponse[Any]:
+        """Import an existing private key as a treasury wallet (requires password re-auth)."""
+        return self._http.request(
+            "POST",
+            f"/v1/treasury/wallets/{chain}/import",
+            body={"private_key": private_key, "format": format},
+            headers={"X-Auth-Confirm": password},
+        )

@@ -44,3 +44,20 @@ class SigningKeysResource:
     def balance(self, agent_id: str, chain: str) -> OneclawResponse[Any]:
         """Get the balance for a signing key's address."""
         return self._http.request("GET", f"/v1/agents/{agent_id}/signing-keys/{chain}/balance")
+
+    def import_key(
+        self,
+        agent_id: str,
+        chain: str,
+        *,
+        private_key: str,
+        format: str = "hex",
+        password: str,
+    ) -> OneclawResponse[Any]:
+        """Import an existing private key as a signing key (requires password re-auth)."""
+        return self._http.request(
+            "POST",
+            f"/v1/agents/{agent_id}/signing-keys/{chain}/import",
+            body={"private_key": private_key, "format": format},
+            headers={"X-Auth-Confirm": password},
+        )
