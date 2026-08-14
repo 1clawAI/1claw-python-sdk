@@ -42,7 +42,7 @@ class ContractAbisResource:
     def list(self, *, chain: str | None = None) -> OneclawResponse[Any]:
         """List contract ABIs, optionally filtered by chain."""
         params = {"chain": chain} if chain else None
-        return self._http.request("GET", "/v1/org/contract-abis", params=params)
+        return self._http.request("GET", "/v1/org/contract-abis", query=params)
 
     def get(self, abi_id: str) -> OneclawResponse[Any]:
         """Get a contract ABI by ID."""

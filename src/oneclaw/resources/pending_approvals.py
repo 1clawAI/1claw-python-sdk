@@ -51,7 +51,7 @@ class PendingApprovalsResource:
             params["limit"] = limit
         if offset is not None:
             params["offset"] = offset
-        return self._http.request("GET", "/v1/pending-approvals", params=params or None)
+        return self._http.request("GET", "/v1/pending-approvals", query=params or None)
 
     def get(self, approval_id: str) -> OneclawResponse[Any]:
         """Get pending approval details including signatures."""
