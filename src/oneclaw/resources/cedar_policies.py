@@ -16,13 +16,14 @@ class CedarPoliciesResource:
         self._http = http
 
     def create(
-        self, *, policy_text: str, description: str | None = None
+        self, *, name: str, cedar_text: str
     ) -> OneclawResponse[Any]:
         """Create a Cedar policy."""
-        body: dict[str, Any] = {"policy_text": policy_text}
-        if description is not None:
-            body["description"] = description
-        return self._http.request("POST", "/v1/org/cedar-policies", body=body)
+        return self._http.request(
+            "POST",
+            "/v1/org/cedar-policies",
+            body={"name": name, "cedar_text": cedar_text},
+        )
 
     def list(self) -> OneclawResponse[Any]:
         """List all Cedar policies for the organization."""

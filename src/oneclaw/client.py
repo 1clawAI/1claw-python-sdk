@@ -14,12 +14,14 @@ from oneclaw.resources.bindings import BindingsResource
 from oneclaw.resources.cards import CardsResource
 from oneclaw.resources.cedar_policies import CedarPoliciesResource
 from oneclaw.resources.chains import ChainsResource
+from oneclaw.resources.contract_abis import ContractAbisResource
 from oneclaw.resources.channels import ChannelsResource
 from oneclaw.resources.discovery import DiscoveryResource
 from oneclaw.resources.memory import MemoryResource
 from oneclaw.resources.oauth_connect import OAuthConnectResource
 from oneclaw.resources.opa_policies import OpaPoliciesResource
 from oneclaw.resources.org import OrgResource
+from oneclaw.resources.pending_approvals import PendingApprovalsResource
 from oneclaw.resources.platform import PlatformResource
 from oneclaw.resources.policies import PoliciesResource
 from oneclaw.resources.portfolio import PortfolioResource
@@ -98,6 +100,8 @@ class OneclawClient:
         self.runtimes = RuntimesResource(self._http)
         self.discovery = DiscoveryResource(self._http)
         self.oauth_connect = OAuthConnectResource(self._http)
+        self.contract_abis = ContractAbisResource(self._http)
+        self.pending_approvals = PendingApprovalsResource(self._http)
 
     def _auto_authenticate_user_key(self, api_key: str) -> None:
         """Exchange a ``1ck_`` user API key for a JWT (fire-and-forget)."""

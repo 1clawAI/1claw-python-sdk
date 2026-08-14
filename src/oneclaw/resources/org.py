@@ -61,3 +61,31 @@ class OrgResource:
     def delete_bankr_config(self) -> OneclawResponse[Any]:
         """Delete the org's Bankr partner key configuration."""
         return self._http.request("DELETE", "/v1/org/bankr-config")
+
+    def get_policy_backend_settings(self) -> OneclawResponse[Any]:
+        """Get Cedar/OPA policy backend settings (owner/admin)."""
+        return self._http.request("GET", "/v1/org/settings/policy-backend")
+
+    def update_policy_backend_settings(
+        self,
+        *,
+        backend: str | None = None,
+        mode: str | None = None,
+        scope: list[str] | None = None,
+        breaker_behavior: str | None = None,
+    ) -> OneclawResponse[Any]:
+        """Update Cedar/OPA policy backend settings (owner/admin)."""
+        body: dict[str, Any] = {}
+        if backend is not None:
+            body["backend"] = backend
+        if mode is not None:
+            body["mode"] = mode
+        if scope is not None:
+            body["scope"] = scope
+        if breaker_behavior is not None:
+            body["breaker_behavior"] = breaker_behavior
+        return self._http.request("PATCH", "/v1/org/settings/policy-backend", body=body)
+
+    def get_policy_shadow_report(self) -> OneclawResponse[Any]:
+        """Get policy shadow mode divergence report (owner/admin)."""
+        return self._http.request("GET", "/v1/org/policy-shadow-report")
