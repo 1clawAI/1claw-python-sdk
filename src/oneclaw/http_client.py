@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import base64
 import json
+import os
 import threading
 import time
 from typing import Any, TypeVar
@@ -92,6 +93,10 @@ class HttpClient:
         if not skip_auth and self._token:
             req_headers["Authorization"] = f"Bearer {self._token}"
 
+        runtime_id = os.environ.get("ONECLAW_RUNTIME_ID")
+        if runtime_id:
+            req_headers["X-1Claw-Runtime-Id"] = runtime_id
+
         cleaned_query = None
         if query:
             cleaned_query = {k: str(v) for k, v in query.items() if v is not None}
@@ -154,6 +159,10 @@ class HttpClient:
             req_headers.update(headers)
         if self._token:
             req_headers["Authorization"] = f"Bearer {self._token}"
+
+        runtime_id = os.environ.get("ONECLAW_RUNTIME_ID")
+        if runtime_id:
+            req_headers["X-1Claw-Runtime-Id"] = runtime_id
 
         cleaned_query = None
         if query:

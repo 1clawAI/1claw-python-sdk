@@ -218,6 +218,7 @@ class CreatePolicyRequest:
     permissions: list[str] = field(default_factory=lambda: ["read"])
     conditions: dict[str, Any] | None = None
     expires_at: str | None = None
+    tx_conditions: dict[str, Any] | None = None
 
 
 @dataclass
@@ -225,6 +226,7 @@ class UpdatePolicyRequest:
     permissions: list[str] | None = None
     conditions: dict[str, Any] | None = None
     expires_at: str | None = None
+    tx_conditions: dict[str, Any] | None = None
 
 
 @dataclass

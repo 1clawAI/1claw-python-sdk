@@ -24,6 +24,7 @@ class ContractAbisResource:
         name: str | None = None,
         description: str | None = None,
         token_decimals: int | None = None,
+        interface_kind: str | None = None,
     ) -> OneclawResponse[Any]:
         """Register a contract ABI."""
         body: dict[str, Any] = {
@@ -37,6 +38,8 @@ class ContractAbisResource:
             body["description"] = description
         if token_decimals is not None:
             body["token_decimals"] = token_decimals
+        if interface_kind is not None:
+            body["interface_kind"] = interface_kind
         return self._http.request("POST", "/v1/org/contract-abis", body=body)
 
     def list(self, *, chain: str | None = None) -> OneclawResponse[Any]:
