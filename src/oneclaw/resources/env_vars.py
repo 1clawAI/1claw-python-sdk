@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, List
+from collections.abc import Sequence
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from oneclaw.http_client import HttpClient
@@ -35,7 +36,7 @@ class EnvVarsResource:
         key: str,
         value: str,
         *,
-        environments: List[str] | None = None,
+        environments: Sequence[str] | None = None,
         git_branch: str | None = None,
         sensitive: bool = False,
         comment: str | None = None,
@@ -74,7 +75,7 @@ class EnvVarsResource:
         key: str,
         *,
         value: str | None = None,
-        environments: List[str] | None = None,
+        environments: Sequence[str] | None = None,
         sensitive: bool | None = None,
         comment: str | None = None,
         environment: str | None = None,
