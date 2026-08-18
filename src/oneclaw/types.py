@@ -1179,3 +1179,68 @@ class ChannelMessageResponse:
 @dataclass
 class ChannelMessageListResponse:
     messages: list[ChannelMessageResponse] = field(default_factory=list)
+
+
+# ── Env Vars ──────────────────────────────────────────────────────────
+
+@dataclass
+class CreateEnvVarRequest:
+    key: str
+    value: str
+    environments: list[str] | None = None
+    git_branch: str | None = None
+    sensitive: bool = False
+    comment: str | None = None
+
+
+@dataclass
+class UpdateEnvVarRequest:
+    value: str | None = None
+    environments: list[str] | None = None
+    sensitive: bool | None = None
+    comment: str | None = None
+
+
+@dataclass
+class EnvVarResponse:
+    id: str
+    key: str = ""
+    environments: list[str] = field(default_factory=list)
+    git_branch: str | None = None
+    sensitive: bool = False
+    comment: str | None = None
+    value: str | None = None
+    version: int = 1
+    created_by: str = ""
+    created_at: str | None = None
+    updated_at: str | None = None
+
+
+@dataclass
+class EnvVarListResponse:
+    env_vars: list[EnvVarResponse] = field(default_factory=list)
+
+
+@dataclass
+class ResolveEnvVarsResponse:
+    vars: dict[str, str] = field(default_factory=dict)
+    sources: dict[str, str] = field(default_factory=dict)
+    environment: str = ""
+    git_branch: str | None = None
+    resolved_at: str | None = None
+
+
+@dataclass
+class EnvironmentResponse:
+    id: str
+    slug: str = ""
+    description: str | None = None
+    is_builtin: bool = False
+    copied_from: str | None = None
+    is_detached: bool = False
+    created_at: str | None = None
+
+
+@dataclass
+class EnvironmentListResponse:
+    environments: list[EnvironmentResponse] = field(default_factory=list)
