@@ -319,6 +319,10 @@ class UpdateAgentRequest:
     tx_max_per_day: int | None = None
     tx_overhead_budget: dict[str, str] | None = None
     solana_ata_allowlist: list[str] | None = None
+    environment: str | None = None
+    environment_locked: bool | None = None
+    env_auto_resolve: bool | None = None
+    per_environment_guardrails: dict[str, Any] | None = None
 
 
 @dataclass
@@ -371,6 +375,10 @@ class AgentResponse:
     tx_count_today: int | None = None
     tx_overhead_today_by_chain: dict[str, str] | None = None
     tx_spent_today_by_chain: dict[str, str] | None = None
+    environment: str | None = None
+    environment_locked: bool | None = None
+    env_auto_resolve: bool | None = None
+    per_environment_guardrails: dict[str, Any] | None = None
 
 
 @dataclass
