@@ -219,6 +219,8 @@ class CreatePolicyRequest:
     conditions: dict[str, Any] | None = None
     expires_at: str | None = None
     tx_conditions: dict[str, Any] | None = None
+    approval_id: str | None = None
+    policy_schema_version: int | None = 2
 
 
 @dataclass
@@ -227,6 +229,7 @@ class UpdatePolicyRequest:
     conditions: dict[str, Any] | None = None
     expires_at: str | None = None
     tx_conditions: dict[str, Any] | None = None
+    approval_id: str | None = None
 
 
 @dataclass
@@ -242,6 +245,7 @@ class PolicyResponse:
     created_at: str | None = None
     created_by: str | None = None
     platform_app_id: str | None = None
+    policy_schema_version: int | None = None
 
 
 @dataclass
