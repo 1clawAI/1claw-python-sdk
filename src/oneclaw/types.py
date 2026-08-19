@@ -437,6 +437,8 @@ class SubmitTransactionRequest:
     token_decimals: int | None = None
     ttl: int | None = None
     xrpl_tx_json: dict[str, Any] | None = None
+    raw_transaction: str | None = None
+    tron_transaction: dict[str, Any] | None = None
 
 
 @dataclass
@@ -493,6 +495,8 @@ class SignIntentRequest:
     token_decimals: int | None = None
     ttl: int | None = None
     xrpl_tx_json: dict[str, Any] | None = None
+    raw_transaction: str | None = None
+    tron_transaction: dict[str, Any] | None = None
 
 
 @dataclass
