@@ -289,6 +289,19 @@ class CreateAgentRequest:
     tx_max_per_day: int | None = None
     tx_overhead_budget: dict[str, str] | None = None
     solana_ata_allowlist: list[str] | None = None
+    tx_approval_policy: dict[str, Any] | None = None
+    typed_data_policy: str | None = None
+    simulation_failure_policy: str | None = None
+    tx_block_unlimited_approvals: bool | None = None
+    tx_per_recipient_max_per_day: int | None = None
+    tx_per_recipient_daily_limit: str | None = None
+    new_recipient_cap_native: str | None = None
+    tx_max_value_usd: str | None = None
+    tx_daily_limit_usd: str | None = None
+    raw_signing_policy: str | None = None
+    personal_sign_policy: dict[str, Any] | None = None
+    allow_erc4337: bool | None = None
+    allow_eip7702: bool | None = None
 
 
 @dataclass
@@ -327,6 +340,20 @@ class UpdateAgentRequest:
     environment_locked: bool | None = None
     env_auto_resolve: bool | None = None
     per_environment_guardrails: dict[str, Any] | None = None
+    tx_approval_policy: dict[str, Any] | None = None
+    typed_data_policy: str | None = None
+    simulation_failure_policy: str | None = None
+    tx_block_unlimited_approvals: bool | None = None
+    tx_per_recipient_max_per_day: int | None = None
+    tx_per_recipient_daily_limit: str | None = None
+    new_recipient_cap_native: str | None = None
+    tx_max_value_usd: str | None = None
+    tx_daily_limit_usd: str | None = None
+    raw_signing_policy: str | None = None
+    personal_sign_policy: dict[str, Any] | None = None
+    allow_erc4337: bool | None = None
+    allow_eip7702: bool | None = None
+    clear_auto_suspended: bool | None = None
 
 
 @dataclass
@@ -383,6 +410,20 @@ class AgentResponse:
     environment_locked: bool | None = None
     env_auto_resolve: bool | None = None
     per_environment_guardrails: dict[str, Any] | None = None
+    tx_approval_policy: dict[str, Any] | None = None
+    typed_data_policy: str | None = None
+    simulation_failure_policy: str | None = None
+    tx_block_unlimited_approvals: bool | None = None
+    tx_per_recipient_max_per_day: int | None = None
+    tx_per_recipient_daily_limit: str | None = None
+    new_recipient_cap_native: str | None = None
+    tx_max_value_usd: str | None = None
+    tx_daily_limit_usd: str | None = None
+    raw_signing_policy: str | None = None
+    personal_sign_policy: dict[str, Any] | None = None
+    allow_erc4337: bool | None = None
+    allow_eip7702: bool | None = None
+    auto_suspended: bool | None = None
 
 
 @dataclass

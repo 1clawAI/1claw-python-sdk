@@ -12,6 +12,18 @@ Agent keys (`ocv_`) auto-exchange for short-lived JWTs and refresh before expiry
 
 If you're using LangChain or CrewAI, consider [`langchain-1claw`](https://pypi.org/project/langchain-1claw/) or [`1claw-crewai-tools`](https://pypi.org/project/1claw-crewai-tools/) instead. They wrap this client as framework tools. This package is the low-level building block.
 
+## Graduated HITL (v0.54–0.55)
+
+Agent types include `tx_approval_policy`, `typed_data_policy`, `simulation_failure_policy`, `raw_signing_policy`, extended guardrails (`tx_block_unlimited_approvals`, USD caps, per-recipient limits), and `auto_suspended`. Matching transactions return **202** `awaiting_approval`; approve via `client.approvals.decide()`.
+
+```python
+await client.agents.update(agent_id, UpdateAgentRequest(
+    tx_approval_policy={"require_above_native": {"ethereum": "0.1"}},
+    typed_data_policy="approve",
+    tx_block_unlimited_approvals=True,
+))
+```
+
 ## Installation
 
 ```bash
