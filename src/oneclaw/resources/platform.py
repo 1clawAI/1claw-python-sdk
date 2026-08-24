@@ -195,11 +195,33 @@ class PlatformResource:
         """List active spend policies for an app."""
         return self._http.request("GET", f"/v1/platform/apps/{app_id}/spend-policies")
 
-    def set_user_spend_policy(self, connection_id: str, **kwargs: Any) -> OneclawResponse[Any]:
+    def set_user_spend_policy(
+        self,
+        connection_id: str,
+        *,
+        idempotency_key: str | None = None,
+        **kwargs: Any,
+    ) -> OneclawResponse[Any]:
         """Set a per-user spend policy override."""
         body = {k: v for k, v in kwargs.items() if v is not None}
+        headers = {"Idempotency-Key": idempotency_key} if idempotency_key else None
         return self._http.request(
-            "PUT", f"/v1/platform/connections/{connection_id}/spend-policy", body=body,
+            "PUT",
+            f"/v1/platform/connections/{connection_id}/spend-policy",
+            body=body,
+            headers=headers,
+        )
+
+    def get_spend_policy(self, app_id: str, policy_id: str) -> OneclawResponse[Any]:
+        """Get a spend policy by ID."""
+        return self._http.request(
+            "GET", f"/v1/platform/apps/{app_id}/spend-policies/{policy_id}",
+        )
+
+    def get_connection_spend_policy(self, connection_id: str) -> OneclawResponse[Any]:
+        """Get effective spend policy for a connection (plt_ auth)."""
+        return self._http.request(
+            "GET", f"/v1/platform/connections/{connection_id}/spend-policy",
         )
 
     def delete_spend_policy(self, app_id: str, policy_id: str) -> OneclawResponse[Any]:
@@ -315,4 +337,81 @@ class PlatformResource:
             "POST",
             f"/v1/platform/apps/{app_id}/templates/{template_id}/preview",
             body=body or None,
+        )
+
+    # -- Platform control plane (v0.58) --------------------------------------
+
+    def transfer_app_ownership(
+        self,
+        app_id: str,
+        *,
+        target_org_id: str | None = None,
+        target_user_email: str | None = None,
+        confirm_token: str | None = None,
+    ) -> OneclawResponse[Any]:
+        """Transfer app ownership to another org (step-up via X-Auth-Confirm)."""
+        body: dict[str, Any] = {}
+        if target_org_id:
+            body["target_org_id"] = target_org_id
+        if target_user_email:
+            body["target_user_email"] = target_user_email
+        headers = {"X-Auth-Confirm": confirm_token} if confirm_token else None
+        return self._http.request(
+            "POST",
+            f"/v1/platform/apps/{app_id}/transfer-ownership",
+            body=body or None,
+            headers=headers,
+        )
+
+    def list_connection_approvals(
+        self,
+        connection_id: str,
+        *,
+        status: str | None = None,
+        limit: int | None = None,
+        offset: int | None = None,
+    ) -> OneclawResponse[Any]:
+        """List approvals for a connected user (plt_ auth)."""
+        query: dict[str, Any] = {}
+        if status is not None:
+            query["status"] = status
+        if limit is not None:
+            query["limit"] = limit
+        if offset is not None:
+            query["offset"] = offset
+        return self._http.request(
+            "GET",
+            f"/v1/platform/connections/{connection_id}/approvals",
+            query=query or None,
+        )
+
+    def get_connection_approval(
+        self, connection_id: str, approval_id: str,
+    ) -> OneclawResponse[Any]:
+        """Get a single approval for a connection (plt_ auth)."""
+        return self._http.request(
+            "GET",
+            f"/v1/platform/connections/{connection_id}/approvals/{approval_id}",
+        )
+
+    def list_connection_pending_approvals(
+        self,
+        connection_id: str,
+        *,
+        status: str | None = None,
+        limit: int | None = None,
+        offset: int | None = None,
+    ) -> OneclawResponse[Any]:
+        """List consensus pending approvals with payload_hash (plt_ auth)."""
+        query: dict[str, Any] = {}
+        if status is not None:
+            query["status"] = status
+        if limit is not None:
+            query["limit"] = limit
+        if offset is not None:
+            query["offset"] = offset
+        return self._http.request(
+            "GET",
+            f"/v1/platform/connections/{connection_id}/pending-approvals",
+            query=query or None,
         )
