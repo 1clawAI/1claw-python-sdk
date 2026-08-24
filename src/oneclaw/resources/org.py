@@ -102,7 +102,7 @@ class OrgResource:
             params["since"] = since
         if until:
             params["until"] = until
-        return self._http.request("GET", "/v1/org/guardrail-shadow-report", params=params or None)
+        return self._http.request("GET", "/v1/org/guardrail-shadow-report", query=params or None)
 
     def list_guardrail_revisions(self) -> OneclawResponse[Any]:
         """List guardrail revision history (owner/admin)."""
