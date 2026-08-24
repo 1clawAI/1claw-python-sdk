@@ -89,3 +89,21 @@ class OrgResource:
     def get_policy_shadow_report(self) -> OneclawResponse[Any]:
         """Get policy shadow mode divergence report (owner/admin)."""
         return self._http.request("GET", "/v1/org/policy-shadow-report")
+
+    def get_guardrail_shadow_report(
+        self,
+        *,
+        since: str | None = None,
+        until: str | None = None,
+    ) -> OneclawResponse[Any]:
+        """Get Convention 6 guardrail shadow violations (owner/admin)."""
+        params: dict[str, str] = {}
+        if since:
+            params["since"] = since
+        if until:
+            params["until"] = until
+        return self._http.request("GET", "/v1/org/guardrail-shadow-report", params=params or None)
+
+    def list_guardrail_revisions(self) -> OneclawResponse[Any]:
+        """List guardrail revision history (owner/admin)."""
+        return self._http.request("GET", "/v1/org/guardrail-revisions")

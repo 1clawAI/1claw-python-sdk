@@ -325,3 +325,18 @@ class AgentsResource:
     def revoke_bankr_key(self, agent_id: str, lease_id: str) -> OneclawResponse[Any]:
         """Revoke a Bankr key lease."""
         return self._http.request("DELETE", f"/v1/agents/{agent_id}/bankr-keys/{lease_id}")
+
+    def replay_guardrails(
+        self,
+        agent_id: str,
+        *,
+        days: int = 7,
+        draft_guardrails: dict[str, Any] | None = None,
+    ) -> OneclawResponse[Any]:
+        """Dry-run guardrail changes against recent agent transactions."""
+        body: dict[str, Any] = {"days": days}
+        if draft_guardrails is not None:
+            body["draft_guardrails"] = draft_guardrails
+        return self._http.request(
+            "POST", f"/v1/agents/{agent_id}/guardrails/replay", body=body,
+        )

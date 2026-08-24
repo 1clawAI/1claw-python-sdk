@@ -197,3 +197,11 @@ class AuthResource:
         if resp.data and resp.data.get("access_token"):
             self._http.set_token(resp.data["access_token"])
         return resp
+
+    def get_human_factor_auth(self) -> OneclawResponse[Any]:
+        """Get effective human factor auth policy for treasury wallet actions."""
+        return self._http.request("GET", "/v1/auth/human-factor-auth")
+
+    def set_human_factor_auth(self, policy: dict[str, Any]) -> OneclawResponse[Any]:
+        """Set user-level human factor auth policy."""
+        return self._http.request("PUT", "/v1/auth/human-factor-auth", body={"policy": policy})
