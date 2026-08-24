@@ -502,6 +502,27 @@ with create_client(api_key="ocv_...") as client:
     # Connection pool is automatically closed
 ```
 
+## v0.56 — Safe accounts, guardrail governance, HFA
+
+```python
+# Agent on-chain accounts (EOA + counterfactual Safe)
+accounts = client.agents.list_accounts(agent_id)
+plan = client.agents.migrate_to_safe(agent_id, chain="ethereum", deprecate_eoa=True)
+client.agents.deprecate_eoa_account(agent_id, "ethereum")
+registry = client.agents.get_safe_module_registry("ethereum")  # public
+client.agents.sync_org_safe_allowances()  # owner/admin
+
+# Guardrail governance
+client.org.get_guardrail_shadow_report(since="2026-01-01T00:00:00Z")
+client.org.list_guardrail_revisions()
+client.agents.replay_guardrails(agent_id, draft_guardrails={"tx_max_value_eth": "0.1"})
+
+# Human Factor Auth
+client.auth.get_human_factor_auth()
+client.auth.set_human_factor_auth({"require_passkey": True})
+client.treasury_wallets.get_auth_policy()  # embedded wallet clients
+```
+
 ## Configuration
 
 | Parameter | Default | Description |

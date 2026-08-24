@@ -101,6 +101,10 @@ class TreasuryWalletsResource:
         """View the effective spend policy for the calling user."""
         return self._http.request("GET", "/v1/treasury/wallets/spend-policy")
 
+    def get_auth_policy(self) -> OneclawResponse[Any]:
+        """Get effective human factor auth policy for embedded wallet clients."""
+        return self._http.request("GET", "/v1/treasury/wallets/auth-policy")
+
     def import_wallet(
         self,
         chain: str,

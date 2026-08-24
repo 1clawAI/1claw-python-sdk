@@ -340,3 +340,53 @@ class AgentsResource:
         return self._http.request(
             "POST", f"/v1/agents/{agent_id}/guardrails/replay", body=body,
         )
+
+    # -- Agent accounts (Phase 5 Safe) -----------------------------------------
+
+    def list_accounts(self, agent_id: str) -> OneclawResponse[Any]:
+        """List agent on-chain accounts (EOA and Safe) per chain."""
+        return self._http.request("GET", f"/v1/agents/{agent_id}/accounts")
+
+    def provision_account(
+        self,
+        agent_id: str,
+        *,
+        chain: str,
+        account_type: str = "eoa",
+        address: str | None = None,
+    ) -> OneclawResponse[Any]:
+        """Provision an agent account record (human-only)."""
+        body: dict[str, Any] = {"chain": chain, "account_type": account_type}
+        if address is not None:
+            body["address"] = address
+        return self._http.request("POST", f"/v1/agents/{agent_id}/accounts", body=body)
+
+    def migrate_to_safe(
+        self,
+        agent_id: str,
+        *,
+        chain: str,
+        deprecate_eoa: bool = False,
+    ) -> OneclawResponse[Any]:
+        """Build EOA→Safe migration plan and provision counterfactual Safe (human-only)."""
+        return self._http.request(
+            "POST",
+            f"/v1/agents/{agent_id}/accounts/migrate",
+            body={"chain": chain, "deprecate_eoa": deprecate_eoa},
+        )
+
+    def deprecate_eoa_account(self, agent_id: str, chain: str) -> OneclawResponse[Any]:
+        """Mark the agent EOA account deprecated for a chain (human-only)."""
+        return self._http.request(
+            "POST", f"/v1/agents/{agent_id}/accounts/{chain}/deprecate-eoa",
+        )
+
+    def get_safe_module_registry(self, chain: str) -> OneclawResponse[Any]:
+        """List pinned Safe module addresses for a chain (public, no auth)."""
+        return self._http.request(
+            "GET", f"/v1/safe/module-registry/{chain}", skip_auth=True,
+        )
+
+    def sync_org_safe_allowances(self) -> OneclawResponse[Any]:
+        """Reconcile org Safe allowance configs against agent guardrails (owner/admin)."""
+        return self._http.request("POST", "/v1/org/safe/sync-allowances")
