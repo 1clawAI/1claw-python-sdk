@@ -121,11 +121,18 @@ class PlatformResource:
         self,
         connection_id: str,
         template_id: str | None = None,
+        *,
+        parameters: dict[str, Any] | None = None,
+        return_to: str | None = None,
     ) -> OneclawResponse[Any]:
         """Bootstrap resources for a connected user from a template."""
         body: dict[str, Any] = {}
         if template_id:
             body["template_id"] = template_id
+        if parameters is not None:
+            body["parameters"] = parameters
+        if return_to:
+            body["return_to"] = return_to
         return self._http.request(
             "POST", f"/v1/platform/connections/{connection_id}/bootstrap", body=body,
         )
@@ -261,4 +268,51 @@ class PlatformResource:
         """
         return self._http.request(
             "POST", f"/v1/platform/apps/{app_id}/rotate-webhook-secret",
+        )
+
+    # -- Platform API expansion (v0.57) --------------------------------------
+
+    def siwe_challenge(self, domain: str | None = None) -> OneclawResponse[Any]:
+        """Issue a SIWE nonce for wallet-native user provisioning."""
+        body: dict[str, Any] = {}
+        if domain:
+            body["domain"] = domain
+        return self._http.request("POST", "/v1/platform/siwe/challenge", body=body or None)
+
+    def get_connection(self, connection_id: str) -> OneclawResponse[Any]:
+        """Get connection details including claim and entitlement status."""
+        return self._http.request("GET", f"/v1/platform/connections/{connection_id}")
+
+    def get_connection_usage(self, connection_id: str) -> OneclawResponse[Any]:
+        """Get per-connection inference spend for the current UTC month."""
+        return self._http.request("GET", f"/v1/platform/connections/{connection_id}/usage")
+
+    def list_entitlements(self, connection_id: str) -> OneclawResponse[Any]:
+        """List on-chain entitlement evaluations for a connection."""
+        return self._http.request("GET", f"/v1/platform/connections/{connection_id}/entitlements")
+
+    def refresh_entitlements(self, connection_id: str) -> OneclawResponse[Any]:
+        """Trigger an immediate entitlement monitor refresh."""
+        return self._http.request(
+            "POST", f"/v1/platform/connections/{connection_id}/entitlements/refresh",
+        )
+
+    def preview_template(
+        self,
+        app_id: str,
+        template_id: str,
+        *,
+        parameters: dict[str, Any] | None = None,
+        subject: dict[str, Any] | None = None,
+    ) -> OneclawResponse[Any]:
+        """Preview resolved template spec with parameter substitution."""
+        body: dict[str, Any] = {}
+        if parameters is not None:
+            body["parameters"] = parameters
+        if subject is not None:
+            body["subject"] = subject
+        return self._http.request(
+            "POST",
+            f"/v1/platform/apps/{app_id}/templates/{template_id}/preview",
+            body=body or None,
         )
