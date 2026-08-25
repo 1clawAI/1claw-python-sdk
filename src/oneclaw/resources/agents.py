@@ -390,3 +390,28 @@ class AgentsResource:
     def sync_org_safe_allowances(self) -> OneclawResponse[Any]:
         """Reconcile org Safe allowance configs against agent guardrails (owner/admin)."""
         return self._http.request("POST", "/v1/org/safe/sync-allowances")
+
+    def create_automation(
+        self,
+        agent_id: str,
+        *,
+        name: str,
+        workflow_spec: dict[str, Any] | builtins.list[Any],
+        trigger_type: str = "manual",
+        auto_trigger: bool = False,
+    ) -> OneclawResponse[Any]:
+        """Create a simple automation for the calling agent (agent token only).
+
+        Allowed triggers: manual, webhook. Allowed steps: log, notify, memory_get,
+        memory_put, wait. Humans should use ``client.automations.create()``.
+        """
+        return self._http.request(
+            "POST",
+            f"/v1/agents/{agent_id}/automations",
+            body={
+                "name": name,
+                "trigger_type": trigger_type,
+                "workflow_spec": workflow_spec,
+                "auto_trigger": auto_trigger,
+            },
+        )
