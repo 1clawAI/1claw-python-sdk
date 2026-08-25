@@ -523,6 +523,27 @@ client.auth.set_human_factor_auth({"require_passkey": True})
 client.treasury_wallets.get_auth_policy()  # embedded wallet clients
 ```
 
+## v0.57 — Platform API expansion
+
+```python
+challenge = client.platform.siwe_challenge()
+conn = client.platform.get_connection(connection_id)
+usage = client.platform.get_connection_usage(connection_id)
+entitlements = client.platform.list_entitlements(connection_id)
+preview = client.platform.preview_template(app_id, template_id, parameters={"agent_name": "demo"})
+```
+
+## v0.58 — Platform control plane
+
+```python
+client.platform.transfer_app_ownership(app_id, target_org_id="...")
+client.platform.get_spend_policy(app_id, policy_id)
+client.platform.get_connection_spend_policy(connection_id)
+client.platform.list_connection_approvals(connection_id)
+client.platform.get_connection_approval(connection_id, approval_id)
+client.platform.list_connection_pending_approvals(connection_id)
+```
+
 ## Configuration
 
 | Parameter | Default | Description |
