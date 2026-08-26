@@ -415,3 +415,58 @@ class PlatformResource:
             f"/v1/platform/connections/{connection_id}/pending-approvals",
             query=query or None,
         )
+
+    def get_template(self, app_id: str, template_id: str) -> OneclawResponse[Any]:
+        """Get a bootstrap template by ID."""
+        return self._http.request(
+            "GET", f"/v1/platform/apps/{app_id}/templates/{template_id}",
+        )
+
+    def create_connection_runtime(
+        self, connection_id: str, body: dict[str, Any],
+    ) -> OneclawResponse[Any]:
+        """Create a Cloud Runtime for a connection agent (plt_ auth)."""
+        return self._http.request(
+            "POST", f"/v1/platform/connections/{connection_id}/runtimes", body=body,
+        )
+
+    def connection_agent_chat(
+        self, connection_id: str, agent_id: str, body: dict[str, Any],
+    ) -> OneclawResponse[Any]:
+        """Chat with an agent on a platform connection (plt_ auth)."""
+        return self._http.request(
+            "POST",
+            f"/v1/platform/connections/{connection_id}/agents/{agent_id}/chat",
+            body=body,
+        )
+
+    def decide_connection_pending_approval(
+        self, connection_id: str, approval_id: str, body: dict[str, Any],
+    ) -> OneclawResponse[Any]:
+        """Vote on a consensus pending approval (plt_ auth)."""
+        return self._http.request(
+            "POST",
+            f"/v1/platform/connections/{connection_id}/pending-approvals/{approval_id}/decide",
+            body=body,
+        )
+
+    def decide_connection_approval(
+        self, connection_id: str, approval_id: str, body: dict[str, Any],
+    ) -> OneclawResponse[Any]:
+        """Decide a mobile approval for a connection (plt_ auth)."""
+        return self._http.request(
+            "POST",
+            f"/v1/platform/connections/{connection_id}/approvals/{approval_id}/decide",
+            body=body,
+        )
+
+    def deactivate_connection_signing_key(
+        self, connection_id: str, chain: str, *, agent_id: str | None = None,
+    ) -> OneclawResponse[Any]:
+        """Deactivate a signing key for a connection agent (plt_ auth)."""
+        query = {"agent_id": agent_id} if agent_id else None
+        return self._http.request(
+            "DELETE",
+            f"/v1/platform/connections/{connection_id}/signing-keys/{chain}",
+            query=query,
+        )
