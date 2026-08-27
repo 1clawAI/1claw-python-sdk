@@ -470,3 +470,31 @@ class PlatformResource:
             f"/v1/platform/connections/{connection_id}/signing-keys/{chain}",
             query=query,
         )
+
+    def get_connection_runtime(
+        self, connection_id: str, runtime_id: str,
+    ) -> OneclawResponse[Any]:
+        """Get a Cloud Runtime provisioned on a connection (plt_ auth)."""
+        return self._http.request(
+            "GET",
+            f"/v1/platform/connections/{connection_id}/runtimes/{runtime_id}",
+        )
+
+    def connection_passkey_enroll_begin(
+        self, connection_id: str,
+    ) -> OneclawResponse[Any]:
+        """Begin WebAuthn passkey enrollment for a connected end-user (plt_ auth)."""
+        return self._http.request(
+            "POST",
+            f"/v1/platform/connections/{connection_id}/passkeys/enroll/begin",
+        )
+
+    def connection_passkey_enroll_complete(
+        self, connection_id: str, body: dict[str, Any],
+    ) -> OneclawResponse[Any]:
+        """Complete WebAuthn passkey enrollment for a connected end-user (plt_ auth)."""
+        return self._http.request(
+            "POST",
+            f"/v1/platform/connections/{connection_id}/passkeys/enroll/complete",
+            body=body,
+        )
