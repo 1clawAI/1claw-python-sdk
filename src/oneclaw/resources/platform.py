@@ -506,6 +506,104 @@ class PlatformResource:
             body=body,
         )
 
+    def create_connection_pending_approval(
+        self, connection_id: str, body: dict[str, Any],
+    ) -> OneclawResponse[Any]:
+        """Create a consensus pending approval for a connection agent (plt_ auth)."""
+        return self._http.request(
+            "POST",
+            f"/v1/platform/connections/{connection_id}/pending-approvals",
+            body=body,
+        )
+
+    def get_connection_portfolio(
+        self,
+        connection_id: str,
+        *,
+        chains: str | None = None,
+        include_tokens: bool | None = None,
+    ) -> OneclawResponse[Any]:
+        """Portfolio/balances for connection agents (plt_ auth)."""
+        query: dict[str, Any] = {}
+        if chains is not None:
+            query["chains"] = chains
+        if include_tokens is not None:
+            query["include_tokens"] = include_tokens
+        return self._http.request(
+            "GET",
+            f"/v1/platform/connections/{connection_id}/portfolio",
+            query=query or None,
+        )
+
+    def list_connection_automations(
+        self, connection_id: str,
+    ) -> OneclawResponse[Any]:
+        """List automations for agents on a connection (plt_ auth)."""
+        return self._http.request(
+            "GET",
+            f"/v1/platform/connections/{connection_id}/automations",
+        )
+
+    def create_connection_automation(
+        self, connection_id: str, body: dict[str, Any],
+    ) -> OneclawResponse[Any]:
+        """Create automation for a connection agent (plt_ auth)."""
+        return self._http.request(
+            "POST",
+            f"/v1/platform/connections/{connection_id}/automations",
+            body=body,
+        )
+
+    def get_connection_memory(
+        self,
+        connection_id: str,
+        namespace: str,
+        key: str,
+        *,
+        agent_id: str | None = None,
+    ) -> OneclawResponse[Any]:
+        """Get agent memory on a connection (plt_ auth)."""
+        query = {"agent_id": agent_id} if agent_id else None
+        return self._http.request(
+            "GET",
+            f"/v1/platform/connections/{connection_id}/memory/{namespace}/{key}",
+            query=query,
+        )
+
+    def put_connection_memory(
+        self,
+        connection_id: str,
+        namespace: str,
+        key: str,
+        body: dict[str, Any],
+        *,
+        agent_id: str | None = None,
+    ) -> OneclawResponse[Any]:
+        """Upsert agent memory on a connection (plt_ auth)."""
+        query = {"agent_id": agent_id} if agent_id else None
+        return self._http.request(
+            "PUT",
+            f"/v1/platform/connections/{connection_id}/memory/{namespace}/{key}",
+            body=body,
+            query=query,
+        )
+
+    def delete_connection_memory(
+        self,
+        connection_id: str,
+        namespace: str,
+        key: str,
+        *,
+        agent_id: str | None = None,
+    ) -> OneclawResponse[Any]:
+        """Delete agent memory on a connection (plt_ auth)."""
+        query = {"agent_id": agent_id} if agent_id else None
+        return self._http.request(
+            "DELETE",
+            f"/v1/platform/connections/{connection_id}/memory/{namespace}/{key}",
+            query=query,
+        )
+
     def get_connection_runtime(
         self, connection_id: str, runtime_id: str,
     ) -> OneclawResponse[Any]:

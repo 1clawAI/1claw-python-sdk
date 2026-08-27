@@ -544,6 +544,28 @@ client.platform.get_connection_approval(connection_id, approval_id)
 client.platform.list_connection_pending_approvals(connection_id)
 ```
 
+## v0.59 — Platform connection expansion
+
+```python
+# Signing keys + agent patch (plt_ auth — not org-scoped /agents routes)
+client.platform.list_connection_signing_keys(connection_id, agent_id=agent_id)
+client.platform.get_connection_signing_key(connection_id, "ethereum", agent_id=agent_id)
+client.platform.patch_connection_agent(connection_id, agent_id, {
+    "intents_api_enabled": True,
+    "system_prompt": "You are a DeFi bot.",
+})
+
+# Portfolio, pending-approval create, automations, memory (v0.59.4)
+portfolio = client.platform.get_connection_portfolio(connection_id, include_tokens=True)
+pending = client.platform.create_connection_pending_approval(connection_id, {
+    "agent_id": agent_id,
+    "action": "transaction",
+    "action_payload": {"chain": "ethereum", "to": "0x...", "value": "0.1"},
+})
+autos = client.platform.list_connection_automations(connection_id)
+client.platform.put_connection_memory(connection_id, "default", "pref", {"value": "..."}, agent_id=agent_id)
+```
+
 ## Configuration
 
 | Parameter | Default | Description |
