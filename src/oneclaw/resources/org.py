@@ -107,3 +107,21 @@ class OrgResource:
     def list_guardrail_revisions(self) -> OneclawResponse[Any]:
         """List guardrail revision history (owner/admin)."""
         return self._http.request("GET", "/v1/org/guardrail-revisions")
+
+    def get_onboarding_status(self) -> OneclawResponse[Any]:
+        """Get onboarding progress (welcome bundle, agent, policy, sample secret)."""
+        return self._http.request("GET", "/v1/org/onboarding/status")
+
+    def provision_onboarding(
+        self,
+        *,
+        agent_name: str | None = None,
+        client: str | None = None,
+    ) -> OneclawResponse[Any]:
+        """Provision MCP onboarding bundle (human-only; returns one-time ocv_ key)."""
+        body: dict[str, Any] = {}
+        if agent_name:
+            body["agent_name"] = agent_name
+        if client:
+            body["client"] = client
+        return self._http.request("POST", "/v1/onboarding/provision", body=body)
