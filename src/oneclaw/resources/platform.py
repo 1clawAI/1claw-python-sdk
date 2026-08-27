@@ -471,6 +471,41 @@ class PlatformResource:
             query=query,
         )
 
+    def list_connection_signing_keys(
+        self, connection_id: str, *, agent_id: str | None = None,
+    ) -> OneclawResponse[Any]:
+        """List signing keys for a connection agent (plt_ auth, public metadata only)."""
+        query = {"agent_id": agent_id} if agent_id else None
+        return self._http.request(
+            "GET",
+            f"/v1/platform/connections/{connection_id}/signing-keys",
+            query=query,
+        )
+
+    def get_connection_signing_key(
+        self, connection_id: str, chain: str, *, agent_id: str | None = None,
+    ) -> OneclawResponse[Any]:
+        """Get a signing key for a connection agent by chain (plt_ auth)."""
+        query = {"agent_id": agent_id} if agent_id else None
+        return self._http.request(
+            "GET",
+            f"/v1/platform/connections/{connection_id}/signing-keys/{chain}",
+            query=query,
+        )
+
+    def patch_connection_agent(
+        self,
+        connection_id: str,
+        agent_id: str,
+        body: dict[str, Any],
+    ) -> OneclawResponse[Any]:
+        """Patch limited agent settings on a connection (plt_ auth)."""
+        return self._http.request(
+            "PATCH",
+            f"/v1/platform/connections/{connection_id}/agents/{agent_id}",
+            body=body,
+        )
+
     def get_connection_runtime(
         self, connection_id: str, runtime_id: str,
     ) -> OneclawResponse[Any]:
