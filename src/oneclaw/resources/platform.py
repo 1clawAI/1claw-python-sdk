@@ -631,3 +631,16 @@ class PlatformResource:
             f"/v1/platform/connections/{connection_id}/passkeys/enroll/complete",
             body=body,
         )
+
+    def get_platform_webhooks(self, app_id: str) -> OneclawResponse[Any]:
+        """Platform webhook delivery catalog (plt_ or user JWT)."""
+        return self._http.request("GET", f"/v1/platform/apps/{app_id}/webhooks")
+
+    def inspect_content(
+        self, content: str, *, context: str | None = None,
+    ) -> OneclawResponse[Any]:
+        """Scan text for threats (MCP inspect_content REST parity). Fail-closed."""
+        body: dict[str, Any] = {"content": content}
+        if context is not None:
+            body["context"] = context
+        return self._http.request("POST", "/v1/shroud/inspect-content", body=body)
