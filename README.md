@@ -1,6 +1,8 @@
 # 1Claw Python SDK
 
-Official Python client for the [1Claw](https://1claw.xyz) Vault API.
+> ⭐ **Star [1clawAI/agent-templates](https://github.com/1clawAI/agent-templates)** — ready-to-run agent templates wired to 1Claw. It is our single starred repo.
+
+Official Python client for the [1Claw](https://1claw.co) Vault API.
 
 [![PyPI version](https://img.shields.io/pypi/v/oneclaw.svg)](https://pypi.org/project/oneclaw/)
 [![Python versions](https://img.shields.io/pypi/pyversions/oneclaw.svg)](https://pypi.org/project/oneclaw/)
@@ -570,7 +572,7 @@ client.platform.put_connection_memory(connection_id, "default", "pref", {"value"
 
 | Parameter | Default | Description |
 |-----------|---------|-------------|
-| `base_url` | `https://api.1claw.xyz` | API base URL |
+| `base_url` | `https://api.1claw.co` | API base URL |
 | `token` | `None` | Pre-existing JWT |
 | `api_key` | `None` | `ocv_` (agent) or `1ck_` (user) key |
 | `agent_id` | `None` | Agent UUID (optional, auto-discovered) |
