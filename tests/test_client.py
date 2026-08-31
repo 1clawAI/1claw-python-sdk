@@ -7,7 +7,7 @@ import respx
 
 from oneclaw import OneclawError, create_client
 
-BASE = "https://api.1claw.xyz"
+BASE = "https://api.1claw.co"
 
 
 @respx.mock
