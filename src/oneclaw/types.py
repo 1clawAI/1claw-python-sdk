@@ -12,7 +12,7 @@ T = TypeVar("T")
 class OneclawClientConfig:
     """Configuration for the 1Claw SDK client."""
 
-    base_url: str = "https://api.1claw.xyz"
+    base_url: str = "https://api.1claw.co"
     token: str | None = None
     api_key: str | None = None
     agent_id: str | None = None
