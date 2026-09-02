@@ -557,7 +557,7 @@ client.platform.patch_connection_agent(connection_id, agent_id, {
     "system_prompt": "You are a DeFi bot.",
 })
 
-# Portfolio, pending-approval create, automations, memory (v0.59.4)
+# Portfolio, pending-approval create, automations, memory (v0.59.9)
 portfolio = client.platform.get_connection_portfolio(connection_id, include_tokens=True)
 pending = client.platform.create_connection_pending_approval(connection_id, {
     "agent_id": agent_id,
