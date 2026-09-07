@@ -416,6 +416,80 @@ class PlatformResource:
             query=query or None,
         )
 
+    # ── Fleets ────────────────────────────────────────────────────────
+    #
+    # Every agent one template provisioned, as one cohort. Each of these
+    # applies to all of them at once, which is the point and also the hazard:
+    # nobody reviews a fleet request per agent.
+
+    def get_fleet(self, app_id: str, template_id: str) -> OneclawResponse[Any]:
+        """Fleet summary: cohort size, version skew, and how many agents drifted.
+
+        ``bulk_patchable_fields`` on the response is the authoritative list of
+        what :meth:`bulk_patch_fleet` and :meth:`rollout_fleet` will carry. Read
+        it rather than hard-coding the list: it is narrower than a single-agent
+        patch (no guardrails, no capability flags) and may narrow further.
+        """
+        return self._http.request(
+            "GET", f"/v1/platform/apps/{app_id}/fleets/{template_id}",
+        )
+
+    def list_fleet_agents(
+        self, app_id: str, template_id: str, limit: int | None = None,
+        offset: int | None = None,
+    ) -> OneclawResponse[Any]:
+        """List the agents in a fleet."""
+        query: dict[str, Any] = {}
+        if limit is not None:
+            query["limit"] = limit
+        if offset is not None:
+            query["offset"] = offset
+        return self._http.request(
+            "GET", f"/v1/platform/apps/{app_id}/fleets/{template_id}/agents",
+            query=query or None,
+        )
+
+    def bulk_patch_fleet(
+        self, app_id: str, template_id: str, patch: dict[str, Any],
+    ) -> OneclawResponse[Any]:
+        """Apply one patch to every agent in the cohort.
+
+        Guardrails and capability flags (``intents_api_enabled``,
+        ``execution_intents_enabled``) are refused with a 400 naming the field,
+        and one bad field refuses the whole patch rather than applying it in
+        part. Changing a guardrail for a thousand agents in one request is a
+        thousand decisions nobody made individually.
+        """
+        return self._http.request(
+            "POST", f"/v1/platform/apps/{app_id}/fleets/{template_id}/bulk-patch",
+            body={"patch": patch},
+        )
+
+    def rollout_fleet(
+        self, app_id: str, template_id: str, *, force: bool = False,
+        dry_run: bool = False,
+    ) -> OneclawResponse[Any]:
+        """Bring the cohort up to the template's current version.
+
+        An agent changed outside fleet control is skipped rather than
+        corrected. ``force=True`` overrides that but still cannot carry a
+        guardrail or a capability flag. ``dry_run=True`` reports the plan,
+        claims no job (``job_id`` comes back ``None``), and so never blocks the
+        real rollout that follows it. Only one rollout runs per template at a
+        time; a second returns 409.
+        """
+        return self._http.request(
+            "POST", f"/v1/platform/apps/{app_id}/fleets/{template_id}/rollout",
+            body={"force": force, "dry_run": dry_run},
+        )
+
+    def pause_fleet(self, app_id: str, template_id: str) -> OneclawResponse[Any]:
+        """Deactivate every agent in the cohort."""
+        return self._http.request(
+            "POST", f"/v1/platform/apps/{app_id}/fleets/{template_id}/pause",
+            body={},
+        )
+
     def get_template(self, app_id: str, template_id: str) -> OneclawResponse[Any]:
         """Get a bootstrap template by ID."""
         return self._http.request(
