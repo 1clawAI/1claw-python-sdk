@@ -568,6 +568,31 @@ autos = client.platform.list_connection_automations(connection_id)
 client.platform.put_connection_memory(connection_id, "default", "pref", {"value": "..."}, agent_id=agent_id)
 ```
 
+## v0.60 — Fleet management
+
+Every agent one bootstrap template provisioned, as one cohort. Each call acts on
+all of them at once, so the surface is deliberately narrower than the per-agent
+API: guardrails and capability flags are not bulk-patchable, and one bad field
+refuses the whole patch rather than applying part of it.
+
+```python
+fleet = client.platform.get_fleet(app_id, template_id).data
+print(f"{fleet['agents_behind']} of {fleet['total_agents']} behind")
+
+# Read the allowlist from the server rather than hard-coding it.
+if "system_prompt" in fleet["bulk_patchable_fields"]:
+    client.platform.bulk_patch_fleet(app_id, template_id, {
+        "system_prompt": "You are a careful assistant.",
+    })
+
+# A dry run changes nothing and claims no job, so job_id comes back None.
+plan = client.platform.rollout_fleet(app_id, template_id, dry_run=True).data
+print(plan["skipped_drifted"], "agent(s) were hand-edited and would be skipped")
+
+client.platform.list_fleet_agents(app_id, template_id, limit=100)
+client.platform.pause_fleet(app_id, template_id)
+```
+
 ## Configuration
 
 | Parameter | Default | Description |
