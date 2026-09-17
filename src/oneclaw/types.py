@@ -60,11 +60,28 @@ class LoginResponse:
 
 
 @dataclass
+class AgentEntitlements:
+    """Flags returned on agent token exchange (vault >= 0.61.17)."""
+
+    intents_api: bool = False
+    execution_intents: bool = False
+    execution_require_tee: bool = False
+    intents_require_tee: bool = False
+    cards: bool = False
+    memory: bool = False
+    shroud: bool = False
+    discoverable: bool = False
+    treasury_signer: bool = False
+    has_delegations: bool = False
+
+
+@dataclass
 class TokenResponse:
     access_token: str
     expires_in: int
     agent_id: str | None = None
     vault_ids: list[str] | None = None
+    entitlements: AgentEntitlements | None = None
 
 
 @dataclass
