@@ -586,6 +586,10 @@ class SigningKeyResponse:
     address: str | None = None
     is_active: bool | None = None
     created_at: str | None = None
+    #: ``"server"`` — 1Claw holds the whole private key and can sign alone.
+    #: ``"client_tss"`` — 2-party threshold key; the owner's passkey share is required.
+    #: ``None`` on responses from a vault older than 0.61.20.
+    custody: str | None = None
 
 
 @dataclass
