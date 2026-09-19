@@ -113,6 +113,35 @@ class AgentsResource:
         """List an agent's child agents."""
         return self._http.request("GET", f"/v1/agents/{parent_id}/children")
 
+    def create_router_key(
+        self,
+        agent_id: str,
+        *,
+        name: str | None = None,
+        max_concurrent_streams: int | None = None,
+        spend_cap_usd: float | None = None,
+    ) -> OneclawResponse[Any]:
+        """Mint an ``sk-shroud-v1-<32>`` router key for a Shroud-enabled agent
+        (vault >= 0.61.31, human-only). A stock OpenAI/Anthropic SDK sends it as
+        ``Authorization: Bearer`` with ``base_url`` set to the gateway; the plaintext
+        ``router_key`` is returned once."""
+        body: dict[str, Any] = {}
+        if name is not None:
+            body["name"] = name
+        if max_concurrent_streams is not None:
+            body["max_concurrent_streams"] = max_concurrent_streams
+        if spend_cap_usd is not None:
+            body["spend_cap_usd"] = spend_cap_usd
+        return self._http.request("POST", f"/v1/agents/{agent_id}/router-keys", body=body)
+
+    def list_router_keys(self, agent_id: str) -> OneclawResponse[Any]:
+        """List an agent's router keys (live and revoked; prefix only)."""
+        return self._http.request("GET", f"/v1/agents/{agent_id}/router-keys")
+
+    def revoke_router_key(self, agent_id: str, key_id: str) -> OneclawResponse[Any]:
+        """Revoke a router key; the gateway refuses it within 60 s. Human-only."""
+        return self._http.request("DELETE", f"/v1/agents/{agent_id}/router-keys/{key_id}")
+
     def rotate_key(self, agent_id: str) -> OneclawResponse[Any]:
         """Rotate an agent's API key. Returns the new key (one-time)."""
         return self._http.request("POST", f"/v1/agents/{agent_id}/rotate-key")
