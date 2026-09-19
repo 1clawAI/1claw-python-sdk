@@ -47,6 +47,13 @@ class ApprovalsResource:
         """Get an approval request by ID."""
         return self._http.request("GET", f"/v1/approvals/{approval_id}")
 
+    def cancel(self, approval_id: str, reason: str | None = None) -> OneclawResponse[Any]:
+        """Withdraw a pending approval (vault >= 0.61.28). Callable by the requesting
+        agent or the addressed human; if it was already decided, the existing decision
+        is returned unchanged (first answer wins)."""
+        body = {"reason": reason} if reason else {}
+        return self._http.request("POST", f"/v1/approvals/{approval_id}/cancel", body=body)
+
     def decide(self, approval_id: str, decision: str) -> OneclawResponse[Any]:
         """Approve or reject an approval request."""
         return self._http.request(
