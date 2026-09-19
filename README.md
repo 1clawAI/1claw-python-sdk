@@ -107,6 +107,15 @@ api_key = resp.data["api_key"]  # Save this — shown only once
 
 # Self-enroll (no auth required)
 client.agents.enroll("my-agent", "admin@example.com")
+
+# Pair with a fingerprint: the human compares SHA256:… on the approval page,
+# the agent polls for the decision and receives its API key once.
+pairing = client.agents.enroll("my-agent", public_key="ssh-ed25519 AAAA…").data
+print(pairing["fingerprint"], pairing["approval_url"])
+status = client.agents.enrollment_status(pairing["pairing_id"], pairing["poll_token"]).data
+
+# Spend from a passkey-owned Safe under an on-chain Allowance Module grant
+client.agents.spend_from_passkey_safe(agent_id, safe_id, to="0xRecipient…", amount="10000000000000000")
 ```
 
 ### Agent Delegation
