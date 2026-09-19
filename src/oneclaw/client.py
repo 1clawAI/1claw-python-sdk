@@ -15,6 +15,7 @@ from oneclaw.resources.cards import CardsResource
 from oneclaw.resources.cedar_policies import CedarPoliciesResource
 from oneclaw.resources.chains import ChainsResource
 from oneclaw.resources.channels import ChannelsResource
+from oneclaw.resources.connectors import ConnectorsResource
 from oneclaw.resources.contract_abis import ContractAbisResource
 from oneclaw.resources.discovery import DiscoveryResource
 from oneclaw.resources.env_vars import EnvVarsResource
@@ -101,6 +102,7 @@ class OneclawClient:
         self.runtimes = RuntimesResource(self._http)
         self.discovery = DiscoveryResource(self._http)
         self.oauth_connect = OAuthConnectResource(self._http)
+        self.connectors = ConnectorsResource(self._http)
         self.contract_abis = ContractAbisResource(self._http)
         self.pending_approvals = PendingApprovalsResource(self._http)
         self.env_vars = EnvVarsResource(self._http)

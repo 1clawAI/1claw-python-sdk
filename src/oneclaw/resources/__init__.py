@@ -11,6 +11,7 @@ from oneclaw.resources.bindings import BindingsResource
 from oneclaw.resources.cards import CardsResource
 from oneclaw.resources.chains import ChainsResource
 from oneclaw.resources.channels import ChannelsResource
+from oneclaw.resources.connectors import ConnectorsResource
 from oneclaw.resources.discovery import DiscoveryResource
 from oneclaw.resources.env_vars import EnvVarsResource
 from oneclaw.resources.memory import MemoryResource
@@ -52,6 +53,7 @@ __all__ = [
     "ChannelsResource",
     "AutomationsResource",
     "MemoryResource",
+    "ConnectorsResource",
     "OAuthConnectResource",
     "RuntimesResource",
     "DiscoveryResource",
