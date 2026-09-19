@@ -93,12 +93,37 @@ class AgentsResource:
         return self._http.request("POST", f"/v1/agents/{agent_id}/rotate-identity-keys")
 
     def enroll(
-        self, name: str, human_email: str, description: str = ""
+        self,
+        name: str,
+        human_email: str | None = None,
+        description: str = "",
+        public_key: str | None = None,
     ) -> OneclawResponse[Any]:
-        """Self-enroll an agent (no auth required). Credentials emailed to the human."""
+        """Self-enroll an agent (no auth required).
+
+        With ``human_email`` the approval link is emailed; without it the response
+        carries ``approval_url`` for the human to open while signed in. With
+        ``public_key`` (``ssh-ed25519 AAAA…`` or base64 of the raw 32-byte key) a
+        pairing is opened: the response also carries ``pairing_id``, ``fingerprint``
+        (show it to the human — they verify it on the approval page) and
+        ``poll_token`` for :meth:`enrollment_status`.
+        """
+        body: dict[str, Any] = {"name": name, "description": description}
+        if human_email:
+            body["human_email"] = human_email
+        if public_key:
+            body["public_key"] = public_key
         return self._http.request(
-            "POST", "/v1/agents/enroll",
-            body={"name": name, "human_email": human_email, "description": description},
+            "POST", "/v1/agents/enroll", body=body, skip_auth=True,
+        )
+
+    def enrollment_status(self, pairing_id: str, poll_token: str) -> OneclawResponse[Any]:
+        """Pairing status (no auth). ``status`` is pending/approved/denied/expired; on the
+        first approved response ``api_key`` is present, once."""
+        return self._http.request(
+            "GET",
+            f"/v1/agents/enroll/{pairing_id}/status",
+            query={"poll": poll_token},
             skip_auth=True,
         )
 
