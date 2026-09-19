@@ -84,6 +84,35 @@ class AgentsResource:
         """Delete an agent."""
         return self._http.request("DELETE", f"/v1/agents/{agent_id}")
 
+    def create_child(
+        self,
+        parent_id: str,
+        name: str,
+        *,
+        description: str = "",
+        vault_ids: list[str] | None = None,
+        scopes: list[str] | None = None,
+        memory_namespace_allowlist: list[str] | None = None,
+        action_approval_policy: dict[str, Any] | None = None,
+    ) -> OneclawResponse[Any]:
+        """Create a cheap sub-agent under ``parent_id`` (vault >= 0.61.30, human-only).
+        Subset of the parent's vault_ids/scopes, inherits its policies and guardrails,
+        own API key/memory/action policy, does not count against the plan cap."""
+        body: dict[str, Any] = {"name": name, "description": description}
+        if vault_ids is not None:
+            body["vault_ids"] = vault_ids
+        if scopes is not None:
+            body["scopes"] = scopes
+        if memory_namespace_allowlist is not None:
+            body["memory_namespace_allowlist"] = memory_namespace_allowlist
+        if action_approval_policy is not None:
+            body["action_approval_policy"] = action_approval_policy
+        return self._http.request("POST", f"/v1/agents/{parent_id}/children", body=body)
+
+    def list_children(self, parent_id: str) -> OneclawResponse[Any]:
+        """List an agent's child agents."""
+        return self._http.request("GET", f"/v1/agents/{parent_id}/children")
+
     def rotate_key(self, agent_id: str) -> OneclawResponse[Any]:
         """Rotate an agent's API key. Returns the new key (one-time)."""
         return self._http.request("POST", f"/v1/agents/{agent_id}/rotate-key")

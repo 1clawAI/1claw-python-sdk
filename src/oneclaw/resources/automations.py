@@ -120,6 +120,17 @@ class AutomationsResource:
             "POST", f"/v1/automations/{automation_id}/runs/{run_id}/cancel"
         )
 
+    def resume_run(
+        self, automation_id: str, run_id: str, payload: dict[str, Any] | None = None
+    ) -> OneclawResponse[Any]:
+        """Resume a run parked on an approval, as if approved (vault >= 0.61.30, human-only).
+        Deciding the approval resumes the run automatically; this is the hand-off for a
+        decision made elsewhere. ``payload`` reaches later steps as ``{{resume.*}}``."""
+        body = {"payload": payload} if payload else {}
+        return self._http.request(
+            "POST", f"/v1/automations/{automation_id}/runs/{run_id}/resume", body=body
+        )
+
     def rotate_webhook_token(self, automation_id: str) -> OneclawResponse[Any]:
         """Rotate the webhook trigger token (human-only)."""
         return self._http.request(
