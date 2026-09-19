@@ -127,6 +127,29 @@ class AgentsResource:
             skip_auth=True,
         )
 
+    # -- Passkey-owned Safes (custody: passkey_owner) ---------------------------
+
+    def spend_from_passkey_safe(
+        self,
+        agent_id: str,
+        safe_id: str,
+        *,
+        to: str,
+        amount: str,
+        token: str | None = None,
+    ) -> OneclawResponse[Any]:
+        """Spend from a passkey-owned Safe under an active Allowance Module grant
+        (vault >= 0.61.24). ``amount`` is in base units. The owner's passkey granted
+        this agent a per-period on-chain allowance; guardrails and the sanctions
+        screen run first, and anything above the remaining allowance is refused
+        before gas is spent. Counts as one signature."""
+        body: dict[str, Any] = {"to": to, "amount": amount}
+        if token:
+            body["token"] = token
+        return self._http.request(
+            "POST", f"/v1/agents/{agent_id}/passkey-safes/{safe_id}/spend", body=body
+        )
+
     # -- Intents API -----------------------------------------------------------
 
     def submit_transaction(
