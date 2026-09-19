@@ -21,9 +21,7 @@ class OAuthConnectResource:
 
     def list_connections(self, agent_id: str) -> OneclawResponse[Any]:
         """List all OAuth connections for an agent."""
-        return self._http.request(
-            "GET", f"/v1/agents/{agent_id}/oauth/connections"
-        )
+        return self._http.request("GET", f"/v1/agents/{agent_id}/oauth/connections")
 
     def connect(
         self,
@@ -51,13 +49,9 @@ class OAuthConnectResource:
             body["scopes"] = scopes
         if redirect_after is not None:
             body["redirect_after"] = redirect_after
-        return self._http.request(
-            "POST", f"/v1/agents/{agent_id}/oauth/connect", body=body
-        )
+        return self._http.request("POST", f"/v1/agents/{agent_id}/oauth/connect", body=body)
 
-    def disconnect(
-        self, agent_id: str, binding_id: str
-    ) -> OneclawResponse[Any]:
+    def disconnect(self, agent_id: str, binding_id: str) -> OneclawResponse[Any]:
         """Disconnect (revoke) an OAuth connection for an agent."""
         return self._http.request(
             "POST",
@@ -103,13 +97,9 @@ class OAuthConnectResource:
 
     def list_app_credentials(self, agent_id: str) -> OneclawResponse[Any]:
         """List saved OAuth app credentials for an agent."""
-        return self._http.request(
-            "GET", f"/v1/agents/{agent_id}/oauth/app-credentials"
-        )
+        return self._http.request("GET", f"/v1/agents/{agent_id}/oauth/app-credentials")
 
-    def delete_app_credentials(
-        self, agent_id: str, provider_slug: str
-    ) -> OneclawResponse[Any]:
+    def delete_app_credentials(self, agent_id: str, provider_slug: str) -> OneclawResponse[Any]:
         """Delete saved OAuth app credentials for a provider."""
         return self._http.request(
             "DELETE",
@@ -148,6 +138,4 @@ class OAuthConnectResource:
         app_id : str
             The platform app UUID whose consent should be revoked.
         """
-        return self._http.request(
-            "DELETE", f"/v1/oauth/consents/{app_id}"
-        )
+        return self._http.request("DELETE", f"/v1/oauth/consents/{app_id}")

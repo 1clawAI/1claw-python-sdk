@@ -34,8 +34,10 @@ class SharingResource:
             "expires_in_hours": expires_in_hours,
         }
         for key, val in {
-            "max_views": max_views, "passphrase": passphrase,
-            "recipient_type": recipient_type, "recipient_email": recipient_email,
+            "max_views": max_views,
+            "passphrase": passphrase,
+            "recipient_type": recipient_type,
+            "recipient_email": recipient_email,
             "ip_allowlist": ip_allowlist,
         }.items():
             if val is not None:
@@ -72,6 +74,8 @@ class SharingResource:
         if passphrase:
             body = {"passphrase": passphrase}
         return self._http.request(
-            "POST", f"/v1/shares/{share_id}/access",
-            body=body, skip_auth=True,
+            "POST",
+            f"/v1/shares/{share_id}/access",
+            body=body,
+            skip_auth=True,
         )

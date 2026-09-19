@@ -44,6 +44,7 @@ class OneclawResponse(Generic[T]):
 # Auth
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class LoginRequest:
     email: str
@@ -118,6 +119,7 @@ class UserProfile:
 # Vaults
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class CreateVaultRequest:
     name: str
@@ -171,6 +173,7 @@ class CmekRotationJobResponse:
 # ---------------------------------------------------------------------------
 # Secrets
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class PutSecretRequest:
@@ -227,6 +230,7 @@ class RotateSecretRequest:
 # Policies
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class CreatePolicyRequest:
     principal_type: str
@@ -273,6 +277,7 @@ class PolicyListResponse:
 # ---------------------------------------------------------------------------
 # Agents
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class CreateAgentRequest:
@@ -471,6 +476,7 @@ class EnrollAgentResponse:
 # Transactions / Intents API
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class SubmitTransactionRequest:
     chain: str
@@ -572,6 +578,7 @@ class SignIntentResponse:
 # Signing Keys
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class CreateSigningKeyRequest:
     chain: str
@@ -601,6 +608,7 @@ class SigningKeyListResponse:
 # Chains
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class ChainResponse:
     id: str
@@ -621,6 +629,7 @@ class ChainListResponse:
 # ---------------------------------------------------------------------------
 # Sharing
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class CreateShareRequest:
@@ -656,6 +665,7 @@ class ShareListResponse:
 # Billing
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class SubscriptionResponse:
     tier: str | None = None
@@ -674,6 +684,7 @@ class CreditBalanceResponse:
 # ---------------------------------------------------------------------------
 # Audit
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class AuditEventResponse:
@@ -698,6 +709,7 @@ class AuditEventListResponse:
 # Organization
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class OrgMemberResponse:
     user_id: str
@@ -715,6 +727,7 @@ class OrgMemberListResponse:
 # ---------------------------------------------------------------------------
 # Treasury
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class TreasuryResponse:
@@ -753,6 +766,7 @@ class TreasuryWalletListResponse:
 # Platform
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class PlatformAppResponse:
     id: str
@@ -789,6 +803,7 @@ class BootstrapResponse:
 # Approvals
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class ApprovalResponse:
     id: str
@@ -813,6 +828,7 @@ class ApprovalListResponse:
 # Webhooks
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class WebhookResponse:
     id: str
@@ -830,6 +846,7 @@ class WebhookListResponse:
 # ---------------------------------------------------------------------------
 # Risk Engine
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class RiskEventResponse:
@@ -864,6 +881,7 @@ class HoneytokenResponse:
 # API Keys
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class CreateApiKeyRequest:
     name: str
@@ -897,6 +915,7 @@ class ApiKeyListResponse:
 # Known Tokens
 # ---------------------------------------------------------------------------
 
+
 @dataclass
 class KnownToken:
     id: str
@@ -920,6 +939,7 @@ class KnownTokenListResponse:
 # ---------------------------------------------------------------------------
 # Payment Cards
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class OrderCardRequest:
@@ -996,6 +1016,7 @@ class SearchGiftCardsRequest:
 # ---------------------------------------------------------------------------
 # Execution Intents — Bindings & Execution
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class CredentialSource:
@@ -1102,6 +1123,7 @@ class TestBindingResponse:
 # ---------------------------------------------------------------------------
 # OAuth Connected Accounts
 # ---------------------------------------------------------------------------
+
 
 @dataclass
 class OAuthProviderScope:
@@ -1260,6 +1282,7 @@ class ChannelMessageListResponse:
 
 
 # ── Env Vars ──────────────────────────────────────────────────────────
+
 
 @dataclass
 class CreateEnvVarRequest:

@@ -156,6 +156,4 @@ class RuntimesResource:
             body["passkey_credential"] = passkey_credential
         if reauth_token is not None:
             body["reauth_token"] = reauth_token
-        return self._http.request(
-            "POST", f"/v1/runtimes/{runtime_id}/shell/session", body=body
-        )
+        return self._http.request("POST", f"/v1/runtimes/{runtime_id}/shell/session", body=body)

@@ -29,8 +29,10 @@ class TreasuryResource:
         """Create a new treasury."""
         body: dict[str, Any] = {"name": name, "safe_address": safe_address}
         for key, val in {
-            "chain": chain, "chain_id": chain_id,
-            "threshold": threshold, "signers": signers,
+            "chain": chain,
+            "chain_id": chain_id,
+            "threshold": threshold,
+            "signers": signers,
         }.items():
             if val is not None:
                 body[key] = val
@@ -56,7 +58,8 @@ class TreasuryResource:
     def add_signer(self, treasury_id: str, signer_address: str) -> OneclawResponse[Any]:
         """Add a signer to a treasury."""
         return self._http.request(
-            "POST", f"/v1/treasury/{treasury_id}/signers",
+            "POST",
+            f"/v1/treasury/{treasury_id}/signers",
             body={"signer_address": signer_address},
         )
 
@@ -64,9 +67,7 @@ class TreasuryResource:
         """Remove a signer from a treasury."""
         return self._http.request("DELETE", f"/v1/treasury/{treasury_id}/signers/{signer_address}")
 
-    def request_access(
-        self, treasury_id: str, reason: str | None = None
-    ) -> OneclawResponse[Any]:
+    def request_access(self, treasury_id: str, reason: str | None = None) -> OneclawResponse[Any]:
         """Request access to a treasury (agent-only)."""
         body: dict[str, Any] = {}
         if reason:
@@ -95,14 +96,16 @@ class TreasuryResource:
         if guardrails is not None:
             body["guardrails"] = guardrails
         return self._http.request(
-            "POST", f"/v1/treasury/{treasury_id}/access-requests/{request_id}/approve",
+            "POST",
+            f"/v1/treasury/{treasury_id}/access-requests/{request_id}/approve",
             body=body or None,
         )
 
     def deny_access_request(self, treasury_id: str, request_id: str) -> OneclawResponse[Any]:
         """Deny a treasury access request."""
         return self._http.request(
-            "POST", f"/v1/treasury/{treasury_id}/access-requests/{request_id}/deny",
+            "POST",
+            f"/v1/treasury/{treasury_id}/access-requests/{request_id}/deny",
         )
 
     # -- Proposals -------------------------------------------------------------
@@ -112,9 +115,7 @@ class TreasuryResource:
         body = {k: v for k, v in kwargs.items() if v is not None}
         return self._http.request("POST", f"/v1/treasury/{treasury_id}/proposals", body=body)
 
-    def list_proposals(
-        self, treasury_id: str, status: str | None = None
-    ) -> OneclawResponse[Any]:
+    def list_proposals(self, treasury_id: str, status: str | None = None) -> OneclawResponse[Any]:
         """List proposals for a treasury."""
         query = {"status": status} if status else None
         return self._http.request("GET", f"/v1/treasury/{treasury_id}/proposals", query=query)
@@ -128,14 +129,16 @@ class TreasuryResource:
     ) -> OneclawResponse[Any]:
         """Submit an EIP-712 signature for a proposal."""
         return self._http.request(
-            "POST", f"/v1/treasury/{treasury_id}/proposals/{proposal_id}/sign",
+            "POST",
+            f"/v1/treasury/{treasury_id}/proposals/{proposal_id}/sign",
             body={"signature": signature, "decision": decision},
         )
 
     def execute_proposal(self, treasury_id: str, proposal_id: str) -> OneclawResponse[Any]:
         """Force-execute a proposal if threshold is met."""
         return self._http.request(
-            "POST", f"/v1/treasury/{treasury_id}/proposals/{proposal_id}/execute",
+            "POST",
+            f"/v1/treasury/{treasury_id}/proposals/{proposal_id}/execute",
         )
 
     def cancel_proposal(self, treasury_id: str, proposal_id: str) -> OneclawResponse[Any]:

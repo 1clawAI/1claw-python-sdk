@@ -45,7 +45,8 @@ class BillingResource:
     def credit_topup(self, amount_cents: int) -> OneclawResponse[Any]:
         """Create a Stripe Checkout session for a credit top-up."""
         return self._http.request(
-            "POST", "/v1/billing/credits/topup",
+            "POST",
+            "/v1/billing/credits/topup",
             body={"amount_cents": amount_cents},
         )
 

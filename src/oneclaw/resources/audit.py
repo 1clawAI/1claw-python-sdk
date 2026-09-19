@@ -28,9 +28,12 @@ class AuditResource:
         """Query the audit trail with optional filters."""
         query: dict[str, Any] = {}
         for key, val in {
-            "action": action, "actor_id": actor_id,
-            "resource_type": resource_type, "resource_id": resource_id,
-            "limit": limit, "offset": offset,
+            "action": action,
+            "actor_id": actor_id,
+            "resource_type": resource_type,
+            "resource_id": resource_id,
+            "limit": limit,
+            "offset": offset,
         }.items():
             if val is not None:
                 query[key] = val

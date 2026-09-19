@@ -143,7 +143,10 @@ class AgentsResource:
         if public_key:
             body["public_key"] = public_key
         return self._http.request(
-            "POST", "/v1/agents/enroll", body=body, skip_auth=True,
+            "POST",
+            "/v1/agents/enroll",
+            body=body,
+            skip_auth=True,
         )
 
     def enrollment_status(self, pairing_id: str, poll_token: str) -> OneclawResponse[Any]:
@@ -212,15 +215,24 @@ class AgentsResource:
         """Submit a transaction via the Intents API."""
         body: dict[str, Any] = {"chain": chain, "to": to, "value": value}
         for key, val in {
-            "data": data, "nonce": nonce, "gas_limit": gas_limit,
-            "gas_price": gas_price, "max_fee_per_gas": max_fee_per_gas,
+            "data": data,
+            "nonce": nonce,
+            "gas_limit": gas_limit,
+            "gas_price": gas_price,
+            "max_fee_per_gas": max_fee_per_gas,
             "max_priority_fee_per_gas": max_priority_fee_per_gas,
-            "signing_key_path": signing_key_path, "simulate_first": simulate_first,
-            "gasless": gasless, "treasury_id": treasury_id, "mode": mode,
-            "destination_tag": destination_tag, "memo": memo,
+            "signing_key_path": signing_key_path,
+            "simulate_first": simulate_first,
+            "gasless": gasless,
+            "treasury_id": treasury_id,
+            "mode": mode,
+            "destination_tag": destination_tag,
+            "memo": memo,
             "fee_rate_sat_per_vbyte": fee_rate_sat_per_vbyte,
-            "fee_limit_sun": fee_limit_sun, "token_mint": token_mint,
-            "token_decimals": token_decimals, "ttl": ttl,
+            "fee_limit_sun": fee_limit_sun,
+            "token_mint": token_mint,
+            "token_decimals": token_decimals,
+            "ttl": ttl,
             "xrpl_tx_json": xrpl_tx_json,
         }.items():
             if val is not None:
@@ -229,8 +241,10 @@ class AgentsResource:
         if idempotency_key:
             headers = {"Idempotency-Key": idempotency_key}
         return self._http.request(
-            "POST", f"/v1/agents/{agent_id}/transactions",
-            body=body, headers=headers,
+            "POST",
+            f"/v1/agents/{agent_id}/transactions",
+            body=body,
+            headers=headers,
         )
 
     def sign_transaction(self, agent_id: str, **kwargs: Any) -> OneclawResponse[Any]:
@@ -264,7 +278,8 @@ class AgentsResource:
     ) -> OneclawResponse[Any]:
         """Simulate a bundle of transactions."""
         return self._http.request(
-            "POST", f"/v1/agents/{agent_id}/transactions/simulate-bundle",
+            "POST",
+            f"/v1/agents/{agent_id}/transactions/simulate-bundle",
             body={"transactions": transactions},
         )
 
@@ -415,7 +430,9 @@ class AgentsResource:
         if draft_guardrails is not None:
             body["draft_guardrails"] = draft_guardrails
         return self._http.request(
-            "POST", f"/v1/agents/{agent_id}/guardrails/replay", body=body,
+            "POST",
+            f"/v1/agents/{agent_id}/guardrails/replay",
+            body=body,
         )
 
     # -- Agent accounts (Phase 5 Safe) -----------------------------------------
@@ -455,13 +472,16 @@ class AgentsResource:
     def deprecate_eoa_account(self, agent_id: str, chain: str) -> OneclawResponse[Any]:
         """Mark the agent EOA account deprecated for a chain (human-only)."""
         return self._http.request(
-            "POST", f"/v1/agents/{agent_id}/accounts/{chain}/deprecate-eoa",
+            "POST",
+            f"/v1/agents/{agent_id}/accounts/{chain}/deprecate-eoa",
         )
 
     def get_safe_module_registry(self, chain: str) -> OneclawResponse[Any]:
         """List pinned Safe module addresses for a chain (public, no auth)."""
         return self._http.request(
-            "GET", f"/v1/safe/module-registry/{chain}", skip_auth=True,
+            "GET",
+            f"/v1/safe/module-registry/{chain}",
+            skip_auth=True,
         )
 
     def sync_org_safe_allowances(self) -> OneclawResponse[Any]:

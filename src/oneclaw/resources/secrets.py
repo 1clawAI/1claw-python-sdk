@@ -92,5 +92,6 @@ class SecretsResource:
     def disable_version(self, vault_id: str, key: str, version: int) -> OneclawResponse[Any]:
         """Disable a version so it can no longer be read (retained for audit)."""
         return self._http.request(
-            "POST", f"/v1/vaults/{vault_id}/secret-version-disable/{key}/{version}",
+            "POST",
+            f"/v1/vaults/{vault_id}/secret-version-disable/{key}/{version}",
         )

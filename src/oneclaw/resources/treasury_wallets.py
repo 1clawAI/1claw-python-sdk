@@ -58,8 +58,10 @@ class TreasuryWalletsResource:
         if token_address is not None:
             body["token_address"] = token_address
         return self._http.request(
-            "POST", f"/v1/treasury/wallets/{chain}/send",
-            body=body, headers={"X-Auth-Confirm": password},
+            "POST",
+            f"/v1/treasury/wallets/{chain}/send",
+            body=body,
+            headers={"X-Auth-Confirm": password},
         )
 
     def swap(
@@ -73,7 +75,8 @@ class TreasuryWalletsResource:
     ) -> OneclawResponse[Any]:
         """Swap tokens via 0x DEX aggregator (requires password re-auth)."""
         return self._http.request(
-            "POST", f"/v1/treasury/wallets/{chain}/swap",
+            "POST",
+            f"/v1/treasury/wallets/{chain}/swap",
             body={
                 "sell_token": sell_token,
                 "buy_token": buy_token,
@@ -85,7 +88,8 @@ class TreasuryWalletsResource:
     def export(self, chain: str, password: str) -> OneclawResponse[Any]:
         """Export wallet with private key (requires password re-auth)."""
         return self._http.request(
-            "POST", f"/v1/treasury/wallets/{chain}/export",
+            "POST",
+            f"/v1/treasury/wallets/{chain}/export",
             headers={"X-Auth-Confirm": password},
         )
 

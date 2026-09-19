@@ -27,7 +27,9 @@ class EnvVarsResource:
         if environment is not None:
             query["environment"] = environment
         return self._http.request(
-            "GET", f"/v1/vaults/{vault_id}/env-vars", query=query or None,
+            "GET",
+            f"/v1/vaults/{vault_id}/env-vars",
+            query=query or None,
         )
 
     def create(
@@ -66,7 +68,9 @@ class EnvVarsResource:
         if git_branch is not None:
             query["git_branch"] = git_branch
         return self._http.request(
-            "GET", f"/v1/vaults/{vault_id}/env-vars/{key}", query=query or None,
+            "GET",
+            f"/v1/vaults/{vault_id}/env-vars/{key}",
+            query=query or None,
         )
 
     def update(
@@ -97,7 +101,8 @@ class EnvVarsResource:
         if git_branch is not None:
             query["git_branch"] = git_branch
         return self._http.request(
-            "PATCH", f"/v1/vaults/{vault_id}/env-vars/{key}",
+            "PATCH",
+            f"/v1/vaults/{vault_id}/env-vars/{key}",
             body=body,
             query=query or None,
         )
@@ -117,7 +122,9 @@ class EnvVarsResource:
         if git_branch is not None:
             query["git_branch"] = git_branch
         return self._http.request(
-            "DELETE", f"/v1/vaults/{vault_id}/env-vars/{key}", query=query or None,
+            "DELETE",
+            f"/v1/vaults/{vault_id}/env-vars/{key}",
+            query=query or None,
         )
 
     def resolve(
@@ -136,7 +143,9 @@ class EnvVarsResource:
         if git_branch is not None:
             query["git_branch"] = git_branch
         return self._http.request(
-            "GET", f"/v1/vaults/{vault_id}/env-vars/resolve", query=query,
+            "GET",
+            f"/v1/vaults/{vault_id}/env-vars/resolve",
+            query=query,
         )
 
     # ── Vault environments ──────────────────────────────────
@@ -160,11 +169,14 @@ class EnvVarsResource:
         if copy_from is not None:
             body["copy_from"] = copy_from
         return self._http.request(
-            "POST", f"/v1/vaults/{vault_id}/environments", body=body,
+            "POST",
+            f"/v1/vaults/{vault_id}/environments",
+            body=body,
         )
 
     def delete_environment(self, vault_id: str, slug: str) -> OneclawResponse[Any]:
         """Delete a custom environment from a vault."""
         return self._http.request(
-            "DELETE", f"/v1/vaults/{vault_id}/environments/{slug}",
+            "DELETE",
+            f"/v1/vaults/{vault_id}/environments/{slug}",
         )

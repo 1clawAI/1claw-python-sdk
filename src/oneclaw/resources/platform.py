@@ -33,13 +33,18 @@ class PlatformResource:
     ) -> OneclawResponse[Any]:
         """Register a new platform app. Returns the ``plt_`` API key once."""
         body: dict[str, Any] = {
-            "name": name, "slug": slug,
-            "billing_model": billing_model, "auth_mode": auth_mode,
+            "name": name,
+            "slug": slug,
+            "billing_model": billing_model,
+            "auth_mode": auth_mode,
         }
         for key, val in {
-            "description": description, "redirect_uris": redirect_uris,
-            "oidc_jwks_url": oidc_jwks_url, "oidc_issuer": oidc_issuer,
-            "webhook_url": webhook_url, "max_connected_users": max_connected_users,
+            "description": description,
+            "redirect_uris": redirect_uris,
+            "oidc_jwks_url": oidc_jwks_url,
+            "oidc_issuer": oidc_issuer,
+            "webhook_url": webhook_url,
+            "max_connected_users": max_connected_users,
         }.items():
             if val is not None:
                 body[key] = val
@@ -70,7 +75,9 @@ class PlatformResource:
         if api_key_expires_at:
             body["api_key_expires_at"] = api_key_expires_at
         return self._http.request(
-            "POST", f"/v1/platform/apps/{app_id}/rotate-key", body=body or None,
+            "POST",
+            f"/v1/platform/apps/{app_id}/rotate-key",
+            body=body or None,
         )
 
     # -- Templates -------------------------------------------------------------
@@ -92,13 +99,16 @@ class PlatformResource:
         """Update a platform template."""
         body = {k: v for k, v in kwargs.items() if v is not None}
         return self._http.request(
-            "PATCH", f"/v1/platform/apps/{app_id}/templates/{template_id}", body=body,
+            "PATCH",
+            f"/v1/platform/apps/{app_id}/templates/{template_id}",
+            body=body,
         )
 
     def delete_template(self, app_id: str, template_id: str) -> OneclawResponse[Any]:
         """Delete a platform template."""
         return self._http.request(
-            "DELETE", f"/v1/platform/apps/{app_id}/templates/{template_id}",
+            "DELETE",
+            f"/v1/platform/apps/{app_id}/templates/{template_id}",
         )
 
     # -- User provisioning -----------------------------------------------------
@@ -134,7 +144,9 @@ class PlatformResource:
         if return_to:
             body["return_to"] = return_to
         return self._http.request(
-            "POST", f"/v1/platform/connections/{connection_id}/bootstrap", body=body,
+            "POST",
+            f"/v1/platform/connections/{connection_id}/bootstrap",
+            body=body,
         )
 
     def reissue_claim(self, connection_id: str) -> OneclawResponse[Any]:
@@ -171,7 +183,9 @@ class PlatformResource:
         """Grant platform access to user resources."""
         body = {k: v for k, v in kwargs.items() if v is not None}
         return self._http.request(
-            "POST", f"/v1/platform/connections/{connection_id}/grant", body=body,
+            "POST",
+            f"/v1/platform/connections/{connection_id}/grant",
+            body=body,
         )
 
     def list_grants(self, connection_id: str) -> OneclawResponse[Any]:
@@ -181,7 +195,8 @@ class PlatformResource:
     def revoke_grant(self, connection_id: str, grant_id: str) -> OneclawResponse[Any]:
         """Revoke a specific grant."""
         return self._http.request(
-            "DELETE", f"/v1/platform/connections/{connection_id}/grants/{grant_id}",
+            "DELETE",
+            f"/v1/platform/connections/{connection_id}/grants/{grant_id}",
         )
 
     # -- Spend policies --------------------------------------------------------
@@ -215,19 +230,22 @@ class PlatformResource:
     def get_spend_policy(self, app_id: str, policy_id: str) -> OneclawResponse[Any]:
         """Get a spend policy by ID."""
         return self._http.request(
-            "GET", f"/v1/platform/apps/{app_id}/spend-policies/{policy_id}",
+            "GET",
+            f"/v1/platform/apps/{app_id}/spend-policies/{policy_id}",
         )
 
     def get_connection_spend_policy(self, connection_id: str) -> OneclawResponse[Any]:
         """Get effective spend policy for a connection (plt_ auth)."""
         return self._http.request(
-            "GET", f"/v1/platform/connections/{connection_id}/spend-policy",
+            "GET",
+            f"/v1/platform/connections/{connection_id}/spend-policy",
         )
 
     def delete_spend_policy(self, app_id: str, policy_id: str) -> OneclawResponse[Any]:
         """Deactivate a spend policy."""
         return self._http.request(
-            "DELETE", f"/v1/platform/apps/{app_id}/spend-policies/{policy_id}",
+            "DELETE",
+            f"/v1/platform/apps/{app_id}/spend-policies/{policy_id}",
         )
 
     # -- Marketplace & stats ---------------------------------------------------
@@ -263,7 +281,10 @@ class PlatformResource:
         if category is not None:
             params["category"] = category
         return self._http.request(
-            "GET", "/v1/platform/marketplace", query=params or None, skip_auth=True,
+            "GET",
+            "/v1/platform/marketplace",
+            query=params or None,
+            skip_auth=True,
         )
 
     def get_app_stats(self, app_id: str) -> OneclawResponse[Any]:
@@ -289,7 +310,8 @@ class PlatformResource:
             The platform app UUID.
         """
         return self._http.request(
-            "POST", f"/v1/platform/apps/{app_id}/rotate-webhook-secret",
+            "POST",
+            f"/v1/platform/apps/{app_id}/rotate-webhook-secret",
         )
 
     # -- Platform API expansion (v0.57) --------------------------------------
@@ -316,7 +338,8 @@ class PlatformResource:
     def refresh_entitlements(self, connection_id: str) -> OneclawResponse[Any]:
         """Trigger an immediate entitlement monitor refresh."""
         return self._http.request(
-            "POST", f"/v1/platform/connections/{connection_id}/entitlements/refresh",
+            "POST",
+            f"/v1/platform/connections/{connection_id}/entitlements/refresh",
         )
 
     def preview_template(
@@ -386,7 +409,9 @@ class PlatformResource:
         )
 
     def get_connection_approval(
-        self, connection_id: str, approval_id: str,
+        self,
+        connection_id: str,
+        approval_id: str,
     ) -> OneclawResponse[Any]:
         """Get a single approval for a connection (plt_ auth)."""
         return self._http.request(
@@ -431,11 +456,15 @@ class PlatformResource:
         patch (no guardrails, no capability flags) and may narrow further.
         """
         return self._http.request(
-            "GET", f"/v1/platform/apps/{app_id}/fleets/{template_id}",
+            "GET",
+            f"/v1/platform/apps/{app_id}/fleets/{template_id}",
         )
 
     def list_fleet_agents(
-        self, app_id: str, template_id: str, limit: int | None = None,
+        self,
+        app_id: str,
+        template_id: str,
+        limit: int | None = None,
         offset: int | None = None,
     ) -> OneclawResponse[Any]:
         """List the agents in a fleet."""
@@ -445,12 +474,16 @@ class PlatformResource:
         if offset is not None:
             query["offset"] = offset
         return self._http.request(
-            "GET", f"/v1/platform/apps/{app_id}/fleets/{template_id}/agents",
+            "GET",
+            f"/v1/platform/apps/{app_id}/fleets/{template_id}/agents",
             query=query or None,
         )
 
     def bulk_patch_fleet(
-        self, app_id: str, template_id: str, patch: dict[str, Any],
+        self,
+        app_id: str,
+        template_id: str,
+        patch: dict[str, Any],
     ) -> OneclawResponse[Any]:
         """Apply one patch to every agent in the cohort.
 
@@ -461,12 +494,17 @@ class PlatformResource:
         thousand decisions nobody made individually.
         """
         return self._http.request(
-            "POST", f"/v1/platform/apps/{app_id}/fleets/{template_id}/bulk-patch",
+            "POST",
+            f"/v1/platform/apps/{app_id}/fleets/{template_id}/bulk-patch",
             body={"patch": patch},
         )
 
     def rollout_fleet(
-        self, app_id: str, template_id: str, *, force: bool = False,
+        self,
+        app_id: str,
+        template_id: str,
+        *,
+        force: bool = False,
         dry_run: bool = False,
     ) -> OneclawResponse[Any]:
         """Bring the cohort up to the template's current version.
@@ -479,33 +517,43 @@ class PlatformResource:
         time; a second returns 409.
         """
         return self._http.request(
-            "POST", f"/v1/platform/apps/{app_id}/fleets/{template_id}/rollout",
+            "POST",
+            f"/v1/platform/apps/{app_id}/fleets/{template_id}/rollout",
             body={"force": force, "dry_run": dry_run},
         )
 
     def pause_fleet(self, app_id: str, template_id: str) -> OneclawResponse[Any]:
         """Deactivate every agent in the cohort."""
         return self._http.request(
-            "POST", f"/v1/platform/apps/{app_id}/fleets/{template_id}/pause",
+            "POST",
+            f"/v1/platform/apps/{app_id}/fleets/{template_id}/pause",
             body={},
         )
 
     def get_template(self, app_id: str, template_id: str) -> OneclawResponse[Any]:
         """Get a bootstrap template by ID."""
         return self._http.request(
-            "GET", f"/v1/platform/apps/{app_id}/templates/{template_id}",
+            "GET",
+            f"/v1/platform/apps/{app_id}/templates/{template_id}",
         )
 
     def create_connection_runtime(
-        self, connection_id: str, body: dict[str, Any],
+        self,
+        connection_id: str,
+        body: dict[str, Any],
     ) -> OneclawResponse[Any]:
         """Create a Cloud Runtime for a connection agent (plt_ auth)."""
         return self._http.request(
-            "POST", f"/v1/platform/connections/{connection_id}/runtimes", body=body,
+            "POST",
+            f"/v1/platform/connections/{connection_id}/runtimes",
+            body=body,
         )
 
     def connection_agent_chat(
-        self, connection_id: str, agent_id: str, body: dict[str, Any],
+        self,
+        connection_id: str,
+        agent_id: str,
+        body: dict[str, Any],
     ) -> OneclawResponse[Any]:
         """Chat with an agent on a platform connection (plt_ auth)."""
         return self._http.request(
@@ -515,7 +563,10 @@ class PlatformResource:
         )
 
     def decide_connection_pending_approval(
-        self, connection_id: str, approval_id: str, body: dict[str, Any],
+        self,
+        connection_id: str,
+        approval_id: str,
+        body: dict[str, Any],
     ) -> OneclawResponse[Any]:
         """Vote on a consensus pending approval (plt_ auth)."""
         return self._http.request(
@@ -525,7 +576,10 @@ class PlatformResource:
         )
 
     def decide_connection_approval(
-        self, connection_id: str, approval_id: str, body: dict[str, Any],
+        self,
+        connection_id: str,
+        approval_id: str,
+        body: dict[str, Any],
     ) -> OneclawResponse[Any]:
         """Decide a mobile approval for a connection (plt_ auth)."""
         return self._http.request(
@@ -535,7 +589,11 @@ class PlatformResource:
         )
 
     def deactivate_connection_signing_key(
-        self, connection_id: str, chain: str, *, agent_id: str | None = None,
+        self,
+        connection_id: str,
+        chain: str,
+        *,
+        agent_id: str | None = None,
     ) -> OneclawResponse[Any]:
         """Deactivate a signing key for a connection agent (plt_ auth)."""
         query = {"agent_id": agent_id} if agent_id else None
@@ -546,7 +604,10 @@ class PlatformResource:
         )
 
     def list_connection_signing_keys(
-        self, connection_id: str, *, agent_id: str | None = None,
+        self,
+        connection_id: str,
+        *,
+        agent_id: str | None = None,
     ) -> OneclawResponse[Any]:
         """List signing keys for a connection agent (plt_ auth, public metadata only)."""
         query = {"agent_id": agent_id} if agent_id else None
@@ -557,7 +618,11 @@ class PlatformResource:
         )
 
     def get_connection_signing_key(
-        self, connection_id: str, chain: str, *, agent_id: str | None = None,
+        self,
+        connection_id: str,
+        chain: str,
+        *,
+        agent_id: str | None = None,
     ) -> OneclawResponse[Any]:
         """Get a signing key for a connection agent by chain (plt_ auth)."""
         query = {"agent_id": agent_id} if agent_id else None
@@ -581,7 +646,9 @@ class PlatformResource:
         )
 
     def create_connection_pending_approval(
-        self, connection_id: str, body: dict[str, Any],
+        self,
+        connection_id: str,
+        body: dict[str, Any],
     ) -> OneclawResponse[Any]:
         """Create a consensus pending approval for a connection agent (plt_ auth)."""
         return self._http.request(
@@ -610,7 +677,8 @@ class PlatformResource:
         )
 
     def list_connection_automations(
-        self, connection_id: str,
+        self,
+        connection_id: str,
     ) -> OneclawResponse[Any]:
         """List automations for agents on a connection (plt_ auth)."""
         return self._http.request(
@@ -619,7 +687,9 @@ class PlatformResource:
         )
 
     def create_connection_automation(
-        self, connection_id: str, body: dict[str, Any],
+        self,
+        connection_id: str,
+        body: dict[str, Any],
     ) -> OneclawResponse[Any]:
         """Create automation for a connection agent (plt_ auth)."""
         return self._http.request(
@@ -679,7 +749,9 @@ class PlatformResource:
         )
 
     def get_connection_runtime(
-        self, connection_id: str, runtime_id: str,
+        self,
+        connection_id: str,
+        runtime_id: str,
     ) -> OneclawResponse[Any]:
         """Get a Cloud Runtime provisioned on a connection (plt_ auth)."""
         return self._http.request(
@@ -688,7 +760,8 @@ class PlatformResource:
         )
 
     def connection_passkey_enroll_begin(
-        self, connection_id: str,
+        self,
+        connection_id: str,
     ) -> OneclawResponse[Any]:
         """Begin WebAuthn passkey enrollment for a connected end-user (plt_ auth)."""
         return self._http.request(
@@ -697,7 +770,9 @@ class PlatformResource:
         )
 
     def connection_passkey_enroll_complete(
-        self, connection_id: str, body: dict[str, Any],
+        self,
+        connection_id: str,
+        body: dict[str, Any],
     ) -> OneclawResponse[Any]:
         """Complete WebAuthn passkey enrollment for a connected end-user (plt_ auth)."""
         return self._http.request(
@@ -711,7 +786,10 @@ class PlatformResource:
         return self._http.request("GET", f"/v1/platform/apps/{app_id}/webhooks")
 
     def inspect_content(
-        self, content: str, *, context: str | None = None,
+        self,
+        content: str,
+        *,
+        context: str | None = None,
     ) -> OneclawResponse[Any]:
         """Scan text for threats (MCP inspect_content REST parity). Fail-closed."""
         body: dict[str, Any] = {"content": content}

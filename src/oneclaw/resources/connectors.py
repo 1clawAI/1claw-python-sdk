@@ -69,9 +69,7 @@ class ConnectorsResource:
         body: dict[str, Any] = {"binding_id": binding_id, "event_type": event_type}
         if interval_secs is not None:
             body["interval_secs"] = interval_secs
-        return self._http.request(
-            "POST", f"/v1/agents/{agent_id}/event-subscriptions", body=body
-        )
+        return self._http.request("POST", f"/v1/agents/{agent_id}/event-subscriptions", body=body)
 
     def list_subscriptions(self, agent_id: str) -> OneclawResponse[Any]:
         """An agent's event subscriptions."""

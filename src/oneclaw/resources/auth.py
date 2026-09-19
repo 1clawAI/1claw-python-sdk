@@ -18,7 +18,8 @@ class AuthResource:
     def login(self, email: str, password: str) -> OneclawResponse[Any]:
         """Authenticate with email and password. Returns JWT or MFA challenge."""
         resp = self._http.request(
-            "POST", "/v1/auth/token",
+            "POST",
+            "/v1/auth/token",
             body={"email": email, "password": password},
             skip_auth=True,
         )
@@ -26,15 +27,16 @@ class AuthResource:
             self._http.set_token(resp.data["access_token"])
         return resp
 
-    def agent_token(
-        self, api_key: str, agent_id: str | None = None
-    ) -> OneclawResponse[Any]:
+    def agent_token(self, api_key: str, agent_id: str | None = None) -> OneclawResponse[Any]:
         """Exchange agent credentials for a JWT."""
         body: dict[str, Any] = {"api_key": api_key}
         if agent_id:
             body["agent_id"] = agent_id
         resp = self._http.request(
-            "POST", "/v1/auth/agent-token", body=body, skip_auth=True,
+            "POST",
+            "/v1/auth/agent-token",
+            body=body,
+            skip_auth=True,
         )
         if resp.data and resp.data.get("access_token"):
             self._http.set_token(resp.data["access_token"])
@@ -43,7 +45,8 @@ class AuthResource:
     def api_key_token(self, api_key: str) -> OneclawResponse[Any]:
         """Exchange a user API key (``1ck_``) for a JWT."""
         resp = self._http.request(
-            "POST", "/v1/auth/api-key-token",
+            "POST",
+            "/v1/auth/api-key-token",
             body={"api_key": api_key},
             skip_auth=True,
         )
@@ -81,14 +84,16 @@ class AuthResource:
     def change_password(self, current_password: str, new_password: str) -> OneclawResponse[Any]:
         """Change the current user's password."""
         return self._http.request(
-            "POST", "/v1/auth/change-password",
+            "POST",
+            "/v1/auth/change-password",
             body={"current_password": current_password, "new_password": new_password},
         )
 
     def forgot_password(self, email: str) -> OneclawResponse[Any]:
         """Initiate a password reset."""
         return self._http.request(
-            "POST", "/v1/auth/forgot-password",
+            "POST",
+            "/v1/auth/forgot-password",
             body={"email": email},
             skip_auth=True,
         )
@@ -96,7 +101,8 @@ class AuthResource:
     def reset_password(self, token: str, new_password: str) -> OneclawResponse[Any]:
         """Complete a password reset with the emailed token."""
         return self._http.request(
-            "POST", "/v1/auth/reset-password",
+            "POST",
+            "/v1/auth/reset-password",
             body={"token": token, "new_password": new_password},
             skip_auth=True,
         )
@@ -116,7 +122,8 @@ class AuthResource:
     def mfa_verify(self, mfa_token: str, code: str) -> OneclawResponse[Any]:
         """Verify MFA code during login. Returns the final JWT."""
         resp = self._http.request(
-            "POST", "/v1/auth/mfa/verify",
+            "POST",
+            "/v1/auth/mfa/verify",
             body={"mfa_token": mfa_token, "code": code},
             skip_auth=True,
         )
@@ -192,7 +199,10 @@ class AuthResource:
         if auto_provision_chains:
             body["auto_provision_chains"] = auto_provision_chains
         resp = self._http.request(
-            "POST", "/v1/auth/email-otp/verify", body=body, skip_auth=True,
+            "POST",
+            "/v1/auth/email-otp/verify",
+            body=body,
+            skip_auth=True,
         )
         if resp.data and resp.data.get("access_token"):
             self._http.set_token(resp.data["access_token"])

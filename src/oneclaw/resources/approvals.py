@@ -57,6 +57,7 @@ class ApprovalsResource:
     def decide(self, approval_id: str, decision: str) -> OneclawResponse[Any]:
         """Approve or reject an approval request."""
         return self._http.request(
-            "POST", f"/v1/approvals/{approval_id}/decide",
+            "POST",
+            f"/v1/approvals/{approval_id}/decide",
             body={"decision": decision},
         )

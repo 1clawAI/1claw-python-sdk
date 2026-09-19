@@ -41,9 +41,7 @@ class ChannelsResource:
             body["channel_name"] = channel_name
         if config is not None:
             body["config"] = config
-        return self._http.request(
-            "POST", f"/v1/agents/{agent_id}/channels", body=body
-        )
+        return self._http.request("POST", f"/v1/agents/{agent_id}/channels", body=body)
 
     def list(self, agent_id: str) -> OneclawResponse[Any]:
         """List all messaging channels for an agent."""
@@ -51,9 +49,7 @@ class ChannelsResource:
 
     def get(self, agent_id: str, channel_id: str) -> OneclawResponse[Any]:
         """Get a specific channel."""
-        return self._http.request(
-            "GET", f"/v1/agents/{agent_id}/channels/{channel_id}"
-        )
+        return self._http.request("GET", f"/v1/agents/{agent_id}/channels/{channel_id}")
 
     def update(
         self,
@@ -78,9 +74,7 @@ class ChannelsResource:
 
     def delete(self, agent_id: str, channel_id: str) -> OneclawResponse[Any]:
         """Delete a messaging channel (human-only)."""
-        return self._http.request(
-            "DELETE", f"/v1/agents/{agent_id}/channels/{channel_id}"
-        )
+        return self._http.request("DELETE", f"/v1/agents/{agent_id}/channels/{channel_id}")
 
     def send_message(
         self,

@@ -114,6 +114,10 @@ pairing = client.agents.enroll("my-agent", public_key="ssh-ed25519 AAAA…").dat
 print(pairing["fingerprint"], pairing["approval_url"])
 status = client.agents.enrollment_status(pairing["pairing_id"], pairing["poll_token"]).data
 
+# Child agents (vault >= 0.61.30): own key/memory/approval policy, a subset of the parent's access
+child = client.agents.create_child(parent_id, "summariser-7", scopes=["secrets:read"]).data
+client.agents.list_children(parent_id)
+
 # Spend from a passkey-owned Safe under an on-chain Allowance Module grant
 client.agents.spend_from_passkey_safe(agent_id, safe_id, to="0xRecipient…", amount="10000000000000000")
 ```
@@ -314,6 +318,22 @@ stats = client.platform.get_app_stats(app_id)
 secret = client.platform.rotate_webhook_secret(app_id)
 ```
 
+### Connectors and event subscriptions
+
+```python
+client.connectors.list_presets()                       # catalogue, each preset's event_sources
+client.connectors.install(agent_id, "api-token", host="api.example.com", token=TOKEN)
+sub = client.connectors.subscribe(agent_id, binding_id, "stripe.invoice.created").data
+client.connectors.poll_now(agent_id, sub["id"])       # first poll primes, emits nothing
+```
+
+### Declarative charts
+
+```python
+client.org.diff_chart(chart)                           # read-only plan
+applied = client.org.apply_chart(chart, applied_state).data
+```
+
 ### Webhooks
 
 ```python
@@ -389,6 +409,10 @@ client.automations.trigger(automation_id)
 
 # Get a specific run
 run = client.automations.get_run(automation_id, run_id)
+
+# A run parked on an approval_request step resumes when the approval is decided;
+# hand off a decision made elsewhere (human-only):
+client.automations.resume_run(automation_id, run_id, payload={"ticket": "OPS-12"})
 
 # Cancel a running automation (human-only)
 client.automations.cancel_run(automation_id, run_id)

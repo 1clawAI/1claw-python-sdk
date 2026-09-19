@@ -111,7 +111,8 @@ class OneclawClient:
         """Exchange a ``1ck_`` user API key for a JWT (fire-and-forget)."""
         try:
             resp = self._http.request(
-                "POST", "/v1/auth/api-key-token",
+                "POST",
+                "/v1/auth/api-key-token",
                 body={"api_key": api_key},
                 skip_auth=True,
             )

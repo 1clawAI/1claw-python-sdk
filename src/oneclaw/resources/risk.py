@@ -26,8 +26,10 @@ class RiskResource:
         """List risk events with optional filters."""
         query: dict[str, Any] = {}
         for key, val in {
-            "severity": severity, "principal_type": principal_type,
-            "limit": limit, "offset": offset,
+            "severity": severity,
+            "principal_type": principal_type,
+            "limit": limit,
+            "offset": offset,
         }.items():
             if val is not None:
                 query[key] = val
@@ -48,7 +50,8 @@ class RiskResource:
     ) -> OneclawResponse[Any]:
         """Register a canary secret as a honeytoken."""
         return self._http.request(
-            "POST", "/v1/risk/honeytokens",
+            "POST",
+            "/v1/risk/honeytokens",
             body={"vault_id": vault_id, "secret_path": secret_path},
         )
 

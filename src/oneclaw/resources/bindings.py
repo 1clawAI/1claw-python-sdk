@@ -55,7 +55,9 @@ class BindingsResource:
         """Update a binding's configuration, guardrails, or active status."""
         body = {k: v for k, v in kwargs.items() if v is not None}
         return self._http.request(
-            "PATCH", f"/v1/agents/{agent_id}/bindings/{binding_id}", body=body,
+            "PATCH",
+            f"/v1/agents/{agent_id}/bindings/{binding_id}",
+            body=body,
         )
 
     def delete(self, agent_id: str, binding_id: str) -> OneclawResponse[Any]:
@@ -88,7 +90,9 @@ class BindingsResource:
         if timeout_ms is not None:
             body["timeout_ms"] = timeout_ms
         return self._http.request(
-            "POST", f"/v1/agents/{agent_id}/bindings/{binding_id}/test", body=body,
+            "POST",
+            f"/v1/agents/{agent_id}/bindings/{binding_id}/test",
+            body=body,
         )
 
     def execute(
@@ -124,5 +128,7 @@ class BindingsResource:
         if offset is not None:
             query["offset"] = offset
         return self._http.request(
-            "GET", f"/v1/agents/{agent_id}/executions", query=query or None,
+            "GET",
+            f"/v1/agents/{agent_id}/executions",
+            query=query or None,
         )

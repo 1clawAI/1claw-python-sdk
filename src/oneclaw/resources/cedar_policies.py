@@ -15,9 +15,7 @@ class CedarPoliciesResource:
     def __init__(self, http: HttpClient) -> None:
         self._http = http
 
-    def create(
-        self, *, name: str, cedar_text: str
-    ) -> OneclawResponse[Any]:
+    def create(self, *, name: str, cedar_text: str) -> OneclawResponse[Any]:
         """Create a Cedar policy."""
         return self._http.request(
             "POST",

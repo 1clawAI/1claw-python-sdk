@@ -43,7 +43,8 @@ class VaultResource:
     def enable_cmek(self, vault_id: str, fingerprint: str) -> OneclawResponse[Any]:
         """Enable Customer-Managed Encryption Key on a vault."""
         return self._http.request(
-            "POST", f"/v1/vaults/{vault_id}/cmek",
+            "POST",
+            f"/v1/vaults/{vault_id}/cmek",
             body={"fingerprint": fingerprint},
         )
 
@@ -72,7 +73,8 @@ class VaultResource:
     ) -> OneclawResponse[Any]:
         """Start a server-assisted CMEK key rotation job."""
         return self._http.request(
-            "POST", f"/v1/vaults/{vault_id}/cmek-rotate",
+            "POST",
+            f"/v1/vaults/{vault_id}/cmek-rotate",
             body={"new_fingerprint": new_fingerprint},
             headers={
                 "x-cmek-old-key": old_key_base64,

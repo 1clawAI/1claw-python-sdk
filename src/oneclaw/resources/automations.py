@@ -88,14 +88,10 @@ class AutomationsResource:
         """Delete an automation."""
         return self._http.request("DELETE", f"/v1/automations/{automation_id}")
 
-    def list_runs(
-        self, automation_id: str, *, limit: int | None = None
-    ) -> OneclawResponse[Any]:
+    def list_runs(self, automation_id: str, *, limit: int | None = None) -> OneclawResponse[Any]:
         """List recent runs for an automation."""
         query: dict[str, Any] | None = {"limit": limit} if limit else None
-        return self._http.request(
-            "GET", f"/v1/automations/{automation_id}/runs", query=query
-        )
+        return self._http.request("GET", f"/v1/automations/{automation_id}/runs", query=query)
 
     def trigger(
         self, automation_id: str, *, input: dict[str, Any] | None = None
@@ -104,21 +100,15 @@ class AutomationsResource:
         body: dict[str, Any] = {}
         if input is not None:
             body["input"] = input
-        return self._http.request(
-            "POST", f"/v1/automations/{automation_id}/trigger", body=body
-        )
+        return self._http.request("POST", f"/v1/automations/{automation_id}/trigger", body=body)
 
     def get_run(self, automation_id: str, run_id: str) -> OneclawResponse[Any]:
         """Get a specific automation run by ID."""
-        return self._http.request(
-            "GET", f"/v1/automations/{automation_id}/runs/{run_id}"
-        )
+        return self._http.request("GET", f"/v1/automations/{automation_id}/runs/{run_id}")
 
     def cancel_run(self, automation_id: str, run_id: str) -> OneclawResponse[Any]:
         """Cancel a running or awaiting_approval automation run (human-only)."""
-        return self._http.request(
-            "POST", f"/v1/automations/{automation_id}/runs/{run_id}/cancel"
-        )
+        return self._http.request("POST", f"/v1/automations/{automation_id}/runs/{run_id}/cancel")
 
     def resume_run(
         self, automation_id: str, run_id: str, payload: dict[str, Any] | None = None
@@ -134,7 +124,8 @@ class AutomationsResource:
     def rotate_webhook_token(self, automation_id: str) -> OneclawResponse[Any]:
         """Rotate the webhook trigger token (human-only)."""
         return self._http.request(
-            "POST", f"/v1/automations/{automation_id}/rotate-webhook-token",
+            "POST",
+            f"/v1/automations/{automation_id}/rotate-webhook-token",
         )
 
     def list_presets(self) -> OneclawResponse[Any]:

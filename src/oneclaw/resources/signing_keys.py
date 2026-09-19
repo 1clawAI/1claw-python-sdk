@@ -18,7 +18,8 @@ class SigningKeysResource:
     def create(self, agent_id: str, chain: str) -> OneclawResponse[Any]:
         """Provision a signing key for an agent on a specific chain."""
         return self._http.request(
-            "POST", f"/v1/agents/{agent_id}/signing-keys",
+            "POST",
+            f"/v1/agents/{agent_id}/signing-keys",
             body={"chain": chain},
         )
 
@@ -37,7 +38,8 @@ class SigningKeysResource:
     def export(self, agent_id: str, chain: str, password: str) -> OneclawResponse[Any]:
         """Export a signing key (requires password re-authentication)."""
         return self._http.request(
-            "POST", f"/v1/agents/{agent_id}/signing-keys/{chain}/export",
+            "POST",
+            f"/v1/agents/{agent_id}/signing-keys/{chain}/export",
             headers={"X-Auth-Confirm": password},
         )
 

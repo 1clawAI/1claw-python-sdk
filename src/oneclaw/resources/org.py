@@ -125,3 +125,26 @@ class OrgResource:
         if client:
             body["client"] = client
         return self._http.request("POST", "/v1/onboarding/provision", body=body)
+
+    # -- Declarative charts (`1claw apply`) ---------------------------------
+
+    def diff_chart(
+        self, chart: dict[str, Any], applied_state: dict[str, Any] | None = None
+    ) -> OneclawResponse[Any]:
+        """What applying ``chart`` would do, without doing it (human-only).
+        Pass the ``applied_state`` a previous apply returned so drift can be told
+        from a first run."""
+        return self._http.request(
+            "POST",
+            "/v1/org/apply/diff",
+            body={"chart": chart, "applied_state": applied_state or {}},
+        )
+
+    def apply_chart(
+        self, chart: dict[str, Any], applied_state: dict[str, Any] | None = None
+    ) -> OneclawResponse[Any]:
+        """Apply a chart: vaults, agents, policies, connectors and bindings in
+        dependency order, through the same gated handlers the API uses; never
+        deletes. Save the returned ``applied_state`` for the next run (human-only)."""
+        body = {"chart": chart, "applied_state": applied_state or {}}
+        return self._http.request("POST", "/v1/org/apply", body=body)

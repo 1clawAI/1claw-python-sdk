@@ -30,7 +30,9 @@ class MemoryResource:
         if ttl_secs is not None:
             body["ttl_secs"] = ttl_secs
         return self._http.request(
-            "PUT", f"/v1/agents/{agent_id}/memory/{namespace}/{key}", body=body,
+            "PUT",
+            f"/v1/agents/{agent_id}/memory/{namespace}/{key}",
+            body=body,
         )
 
     # Legacy alias
@@ -39,13 +41,15 @@ class MemoryResource:
     def get(self, agent_id: str, namespace: str, key: str) -> OneclawResponse[Any]:
         """Get a specific memory entry."""
         return self._http.request(
-            "GET", f"/v1/agents/{agent_id}/memory/{namespace}/{key}",
+            "GET",
+            f"/v1/agents/{agent_id}/memory/{namespace}/{key}",
         )
 
     def delete(self, agent_id: str, namespace: str, key: str) -> OneclawResponse[Any]:
         """Delete a memory entry."""
         return self._http.request(
-            "DELETE", f"/v1/agents/{agent_id}/memory/{namespace}/{key}",
+            "DELETE",
+            f"/v1/agents/{agent_id}/memory/{namespace}/{key}",
         )
 
     def list(self, agent_id: str, namespace: str) -> OneclawResponse[Any]:
@@ -69,11 +73,14 @@ class MemoryResource:
         if top_k is not None:
             body["top_k"] = top_k
         return self._http.request(
-            "POST", f"/v1/agents/{agent_id}/memory/search", body=body,
+            "POST",
+            f"/v1/agents/{agent_id}/memory/search",
+            body=body,
         )
 
     def delete_namespace(self, agent_id: str, namespace: str) -> OneclawResponse[Any]:
         """Delete an entire namespace."""
         return self._http.request(
-            "DELETE", f"/v1/agents/{agent_id}/memory/{namespace}",
+            "DELETE",
+            f"/v1/agents/{agent_id}/memory/{namespace}",
         )
