@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import builtins
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
@@ -29,7 +30,7 @@ class ConnectorsResource:
         slug: str,
         *,
         binding_name: str | None = None,
-        scopes: list[str] | None = None,
+        scopes: builtins.list[str] | None = None,
         redirect_after: str | None = None,
         host: str | None = None,
         token: str | None = None,

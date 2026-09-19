@@ -90,9 +90,9 @@ class AgentsResource:
         name: str,
         *,
         description: str = "",
-        vault_ids: list[str] | None = None,
-        scopes: list[str] | None = None,
-        memory_namespace_allowlist: list[str] | None = None,
+        vault_ids: builtins.list[str] | None = None,
+        scopes: builtins.list[str] | None = None,
+        memory_namespace_allowlist: builtins.list[str] | None = None,
         action_approval_policy: dict[str, Any] | None = None,
     ) -> OneclawResponse[Any]:
         """Create a cheap sub-agent under ``parent_id`` (vault >= 0.61.30, human-only).
