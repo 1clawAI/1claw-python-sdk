@@ -118,6 +118,15 @@ status = client.agents.enrollment_status(pairing["pairing_id"], pairing["poll_to
 child = client.agents.create_child(parent_id, "summariser-7", scopes=["secrets:read"]).data
 client.agents.list_children(parent_id)
 
+# Router keys (vault >= 0.61.31): a static Bearer a stock OpenAI/Anthropic SDK sends to the Shroud gateway
+rk = client.agents.create_router_key(agent_id, name="sdk", max_concurrent_streams=5).data
+# rk["router_key"] is shown once; base_url = rk["base_url"] + "/v1"
+client.agents.revoke_router_key(agent_id, rk["id"])
+
+# Rehydration policy (vault >= 0.61.33): the enclave may put this secret only here, only toward these hosts
+client.agents.create_tool_binding(agent_id, secret_path="providers/stripe/api-key", tool_name="http_request",
+                                  arg_path="/headers/Authorization", destination_hosts=["api.stripe.com"])
+
 # Spend from a passkey-owned Safe under an on-chain Allowance Module grant
 client.agents.spend_from_passkey_safe(agent_id, safe_id, to="0xRecipient…", amount="10000000000000000")
 ```
