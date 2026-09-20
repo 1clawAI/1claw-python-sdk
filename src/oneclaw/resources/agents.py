@@ -142,6 +142,35 @@ class AgentsResource:
         """Revoke a router key; the gateway refuses it within 60 s. Human-only."""
         return self._http.request("DELETE", f"/v1/agents/{agent_id}/router-keys/{key_id}")
 
+    def create_tool_binding(
+        self,
+        agent_id: str,
+        *,
+        secret_path: str,
+        tool_name: str,
+        destination_hosts: builtins.list[str],
+        arg_path: str | None = None,
+    ) -> OneclawResponse[Any]:
+        """Allow the enclave to rehydrate the placeholder for ``secret_path`` into
+        ``tool_name`` at ``arg_path`` (JSON pointer or ``*``), only toward
+        ``destination_hosts`` (vault >= 0.61.33, human-only)."""
+        body: dict[str, Any] = {
+            "secret_path": secret_path,
+            "tool_name": tool_name,
+            "destination_hosts": destination_hosts,
+        }
+        if arg_path is not None:
+            body["arg_path"] = arg_path
+        return self._http.request("POST", f"/v1/agents/{agent_id}/tool-bindings", body=body)
+
+    def list_tool_bindings(self, agent_id: str) -> OneclawResponse[Any]:
+        """List an agent's secret → tool bindings."""
+        return self._http.request("GET", f"/v1/agents/{agent_id}/tool-bindings")
+
+    def delete_tool_binding(self, agent_id: str, binding_id: str) -> OneclawResponse[Any]:
+        """Remove a secret → tool binding (human-only)."""
+        return self._http.request("DELETE", f"/v1/agents/{agent_id}/tool-bindings/{binding_id}")
+
     def rotate_key(self, agent_id: str) -> OneclawResponse[Any]:
         """Rotate an agent's API key. Returns the new key (one-time)."""
         return self._http.request("POST", f"/v1/agents/{agent_id}/rotate-key")
