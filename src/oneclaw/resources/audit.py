@@ -22,22 +22,30 @@ class AuditResource:
         actor_id: str | None = None,
         resource_type: str | None = None,
         resource_id: str | None = None,
+        from_time: str | None = None,
+        to_time: str | None = None,
         limit: int | None = None,
         offset: int | None = None,
     ) -> OneclawResponse[Any]:
-        """Query the audit trail with optional filters."""
+        """Query the audit trail with optional filters (``GET /v1/audit/events``).
+
+        ``from_time`` / ``to_time`` are RFC 3339 timestamps. ``resource_type`` is
+        kept for compatibility; the API has no such filter, so it is not sent.
+        """
+        del resource_type
         query: dict[str, Any] = {}
         for key, val in {
             "action": action,
             "actor_id": actor_id,
-            "resource_type": resource_type,
             "resource_id": resource_id,
+            "from": from_time,
+            "to": to_time,
             "limit": limit,
             "offset": offset,
         }.items():
             if val is not None:
                 query[key] = val
-        return self._http.request("GET", "/v1/audit", query=query or None)
+        return self._http.request("GET", "/v1/audit/events", query=query or None)
 
     def verify(
         self,

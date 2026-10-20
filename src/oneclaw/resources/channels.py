@@ -48,8 +48,25 @@ class ChannelsResource:
         return self._http.request("GET", f"/v1/agents/{agent_id}/channels")
 
     def get(self, agent_id: str, channel_id: str) -> OneclawResponse[Any]:
-        """Get a specific channel."""
-        return self._http.request("GET", f"/v1/agents/{agent_id}/channels/{channel_id}")
+        """Get a specific channel.
+
+        The API has no single-channel GET, so this lists the agent's channels
+        and returns the one with ``channel_id`` (a ``not_found`` error if absent).
+        """
+        from oneclaw.types import ErrorInfo, OneclawResponse, ResponseMeta
+
+        resp = self.list(agent_id)
+        if resp.error is not None:
+            return resp
+        channels = (resp.data or {}).get("channels") or []
+        for ch in channels:
+            if isinstance(ch, dict) and ch.get("id") == channel_id:
+                return OneclawResponse(data=ch, error=None, meta=resp.meta)
+        return OneclawResponse(
+            data=None,
+            error=ErrorInfo(type="not_found", message="Channel not found"),
+            meta=ResponseMeta(status=404),
+        )
 
     def update(
         self,

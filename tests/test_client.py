@@ -215,3 +215,75 @@ def test_webhook_create():
         events=["agent.transaction.broadcast"],
     )
     assert resp.data["url"] == "https://example.com/hook"
+
+
+@respx.mock
+def test_audit_list_uses_events_route():
+    route = respx.get(f"{BASE}/v1/audit/events").mock(
+        return_value=httpx.Response(200, json={"events": [], "count": 0})
+    )
+    client = create_client(token="tok")
+    resp = client.audit.list(action="secret.read", from_time="2026-10-01T00:00:00Z", limit=5)
+    assert resp.error is None
+    params = route.calls.last.request.url.params
+    assert params["action"] == "secret.read"
+    assert params["from"] == "2026-10-01T00:00:00Z"
+    assert params["limit"] == "5"
+
+
+@respx.mock
+def test_sharing_routes_match_the_api():
+    create = respx.post(f"{BASE}/v1/secrets/s1/share").mock(
+        return_value=httpx.Response(201, json={"id": "sh1", "share_url": "u"})
+    )
+    outbound = respx.get(f"{BASE}/v1/shares/outbound").mock(
+        return_value=httpx.Response(200, json={"shares": []})
+    )
+    revoke = respx.delete(f"{BASE}/v1/share/sh1").mock(return_value=httpx.Response(204))
+    access = respx.get(f"{BASE}/v1/share/sh1").mock(
+        return_value=httpx.Response(200, json={"value": "x"})
+    )
+    client = create_client(token="tok")
+    resp = client.sharing.create(
+        "s1",
+        recipient_type="anyone_with_link",
+        expires_at="2026-11-01T00:00:00Z",
+        max_access_count=3,
+    )
+    assert resp.error is None
+    import json as _json
+
+    body = _json.loads(create.calls.last.request.content)
+    assert body == {
+        "recipient_type": "anyone_with_link",
+        "expires_at": "2026-11-01T00:00:00Z",
+        "max_access_count": 3,
+    }
+    assert client.sharing.list_outbound().error is None
+    assert client.sharing.revoke("sh1").meta.status == 204
+    assert client.sharing.access("sh1", passphrase="pw").data == {"value": "x"}
+    assert _json.loads(access.calls.last.request.content) == {"passphrase": "pw"}
+    assert outbound.called and revoke.called
+
+
+@respx.mock
+def test_org_update_setting_patches_collection():
+    route = respx.patch(f"{BASE}/v1/org/settings").mock(
+        return_value=httpx.Response(200, json={"key": "k", "value": "v"})
+    )
+    client = create_client(token="tok")
+    assert client.org.update_setting("k", "v").error is None
+    import json as _json
+
+    assert _json.loads(route.calls.last.request.content) == {"key": "k", "value": "v"}
+
+
+@respx.mock
+def test_channels_get_filters_the_list():
+    respx.get(f"{BASE}/v1/agents/a1/channels").mock(
+        return_value=httpx.Response(200, json={"channels": [{"id": "c1"}, {"id": "c2"}]})
+    )
+    client = create_client(token="tok")
+    assert client.channels.get("a1", "c2").data == {"id": "c2"}
+    missing = client.channels.get("a1", "c9")
+    assert missing.error is not None and missing.meta.status == 404

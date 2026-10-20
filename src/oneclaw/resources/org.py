@@ -35,9 +35,17 @@ class OrgResource:
         """Get organization settings."""
         return self._http.request("GET", "/v1/org/settings")
 
-    def update_setting(self, key: str, value: str) -> OneclawResponse[Any]:
-        """Update a single organization setting."""
-        return self._http.request("PUT", f"/v1/org/settings/{key}", body={"value": value})
+    def update_setting(
+        self, key: str, value: str, *, approval_id: str | None = None
+    ) -> OneclawResponse[Any]:
+        """Update an org-level setting (``PATCH /v1/org/settings``).
+
+        Pass ``approval_id`` when resubmitting after a control-plane approval.
+        """
+        body: dict[str, Any] = {"key": key, "value": value}
+        if approval_id is not None:
+            body["approval_id"] = approval_id
+        return self._http.request("PATCH", "/v1/org/settings", body=body)
 
     def agent_keys_vault_id(self) -> OneclawResponse[Any]:
         """Get the ID of the org's ``__agent-keys`` vault."""
